@@ -84,6 +84,8 @@
     "qemu_argv": "qemu-command.json",
     "control_requests": "commands.jsonl",
     "serial_receipt": "serial.txt",
-    "qemu_stderr": "qemu-stderr.txt"
+    "qemu_stderr": "qemu-stderr.txt",
+    "raw_serial_receipt": "serial.raw.gz",
+    "serial_receipt_note": "Plain text removes terminal escape sequences and CR formatting only; byte-exact original retained as serial.raw.gz."
   }
 }

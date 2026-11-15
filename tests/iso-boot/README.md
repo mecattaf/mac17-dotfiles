@@ -52,3 +52,7 @@ payload presence. It does not establish physical Mac boot, hardware behavior,
 installed desktop reboot, or browser/keyring sign-in. The separate
 [installer proof](../installer-vm/evidence-final.json) executes complete
 installation of the exact desktop closure onto disposable encrypted storage.
+
+`serial.txt` is a readable normalization of the terminal receipt: escape
+sequences and carriage-return formatting removed. `serial.raw.gz` preserves
+the byte-exact original, including the reported fan-service failure.

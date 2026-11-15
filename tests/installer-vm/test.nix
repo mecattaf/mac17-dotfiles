@@ -35,7 +35,7 @@ in pkgs.testers.runNixOSTest {
       vlans = [ ];
       qemu.networkingOptions = lib.mkForce [ ];
       qemu.diskInterface = "scsi";
-      qemu.options = [ "-smbios type=1,manufacturer=QEMU,product=MacBookPro14,,3" ]
+      qemu.options = [ "-nic none" "-smbios type=1,manufacturer=QEMU,product=MacBookPro14,,3" ]
         ++ lib.optionals (usbImage != null) [
           "-device qemu-xhci,id=mac17usb"
           "-drive if=none,id=mac17usb,file=${builtins.storePath usbImage},format=raw,snapshot=on"

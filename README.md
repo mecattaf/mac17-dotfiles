@@ -13,7 +13,8 @@ No device uses another person's accounts, private keys or personalized firmware.
 
 ## Start here
 
-- **Tarek:** [Download, flash and first login](docs/START-HERE.md).
+- **Tarek and his personal AI:** [Start the step-by-step guides](docs/README.md).
+- [Compact download, flashing and first-login instructions](docs/START-HERE.md).
 - **Tom:** [Build and release](docs/BUILD-AND-RELEASE.md).
 - [Research and source comparisons](docs/research/).
 - [Lessons from Tom's system](docs/research/tom-dotfiles.md).

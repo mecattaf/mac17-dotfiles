@@ -25,10 +25,14 @@ jobs:
           mkdir -p parts download
           gh release download "$RELEASE_TAG" --repo "$REPOSITORY" --dir parts \
             --pattern 'mac17-installer.iso.part-*' --pattern 'PARTS-SHA256SUMS' \
-            --pattern SHA256SUMS --pattern START-HERE.md --pattern BUILD-MANIFEST.json
+            --pattern SHA256SUMS --pattern START-HERE.md --pattern BUILD-MANIFEST.json \
+            --pattern mac17-guides.zip --pattern GUIDES-SHA256SUMS
           (cd parts; sha256sum --check PARTS-SHA256SUMS)
+          (cd parts; sha256sum --check GUIDES-SHA256SUMS)
           cat parts/mac17-installer.iso.part-* > download/mac17-installer.iso
           cp parts/SHA256SUMS parts/START-HERE.md parts/BUILD-MANIFEST.json download/
+          unzip -q parts/mac17-guides.zip -d download
+          cp download/docs/free-ai.md download/
           (cd download; sha256sum --check SHA256SUMS)
           rm -rf parts
       - name: Upload one downloadable ISO bundle

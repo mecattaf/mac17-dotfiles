@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "guest_kernel": "7.3.4",
+  "runtime_seconds": 410.39,
+  "source_commit": "af5434b66b388e9a8b0bd9ac3d4b3f724df566d6",
+  "target_system": "/nix/store/a5m9aw920zsa929d5g266sfqfbwlsa97-nixos-system-tarek-mac17-26.11.20261113.d5cc683",
+  "target_closure_size": "11.6 GiB",
+  "target_source": "/nix/store/0iqm5pk8axwkm28mkh48w4m8nqw6i71w-source",
+  "target_source_nar_hash": "sha256-3M1DXLqL6GQteauZLMJEw73u3HqV6s4m4hy1lJ7Bs0o=",
+  "flake_lock_sha256": "bb965b64e8055297e96383e568fb7c8cd63ee4ef96c6d2d63bb924994937422e",
+  "installer_sha256": "20838b3562efca33a381404a79f82ccfe05da4d38c465cd4e084b6c9f5250aee",
+  "storage_contract_sha256": "4713593c0db87046706baadb5cd4c5a5524a158e53c26e6f3d7225ad1cb6907b",
+  "test_derivation": "/nix/store/rx41kqgmxm13rxb3makjnql4j71w4qla-vm-test-run-mac17-installer-disposable-disks.drv",
+  "test_result": "/nix/store/79w7iwhkixc4b6kx7l37q5qi5kpv859g-vm-test-run-mac17-installer-disposable-disks",
+  "network_receipt": {
+    "assertion_passed": "test -z \"$(ip route show default)\"",
+    "dhcp": false,
+    "substituters": [],
+    "builders": "",
+    "copy_policy": "nix --offline copy --no-check-sigs --to local?root=/mnt",
+    "install_policy": "nixos-install --system PREPARED_SYSTEM --option substitute false",
+    "qualification": "The guest retained QEMU default e1000e hardware because QEMU needs explicit -nic none. No IPv4 default route and no Nix substitutions/builders; do not claim absent NIC. Actual final ISO boot probe explicitly uses -nic none."
+  },
+  "isolation": "runtime-test --allow-kvm, NixOS QEMU guest, synthetic-only sparse disks, no host block devices or credentials",
+  "summaries": [
+    "[40.91s] (finished: subtest: plan performs zero writes to the selected disk, in 1.10 seconds)",
+    "[41.45s] (finished: subtest: wrong disk model is refused, in 0.55 seconds)",
+    "[42.01s] (finished: subtest: wrong machine model is refused, in 0.56 seconds)",
+    "[46.00s] (finished: subtest: incorrect erase phrase leaves target unchanged, in 3.99 seconds)",
+    "[48.58s] (finished: subtest: mismatching encryption passphrases leave target unchanged, in 2.58 seconds)",
+    "[410.30s] (finished: subtest: real install from the local prepared closure without networking, in 361.71 seconds)",
+    "[410.39s] test script finished in 410.39s"
+  ],
+  "not_tested": [
+    "installed target reboot",
+    "physical Apple boot/hardware",
+    "actual final ISO boot (separate pending proof)"
+  ]
+}

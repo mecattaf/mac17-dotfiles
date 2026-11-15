@@ -18,11 +18,12 @@
     "[221.90s] (finished: subtest: real install from the local prepared closure without networking, in 168.74 seconds)",
     "[221.95s] test script finished in 221.95s"
   ],
-  "isolation": "NixOS QEMU guest under runtime-test --allow-kvm on strix-coordinator; synthetic-only disk images; zero host block devices; no guest network device; substitutions/builders disabled",
+  "isolation": "NixOS QEMU guest under runtime-test --allow-kvm on strix-coordinator; synthetic-only disk images; zero host block devices; no IPv4 default route; DHCP, substitutions and builders disabled",
   "not_tested": [
     "physical Apple boot/hardware",
     "reboot of installed target",
     "final desktop closure (pending)",
     "optional USB helper proof (pending)"
-  ]
+  ],
+  "network_qualification": "QEMU default e1000e NIC existed despite empty networkingOptions; no NIC-absence claim. Production Nix copy explicitly --offline; no IPv4 default route assertion passed."
 }

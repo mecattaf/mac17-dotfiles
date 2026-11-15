@@ -71,3 +71,15 @@ The optional single-USB helper proof passed in 34.35s. See `evidence-usb.json`.
 Repository integration can pass `installerScript` and `storageModule` paths
 to reference the canonical modules directly. Final desktop installs allow
 1800 seconds per PTY operation and 2400 seconds for the overall install.
+
+## Complete desktop payload
+
+The exact released desktop target (11.6 GiB) passed all six scenarios in
+410.39 seconds. See `evidence-final.json` for the source commit, hashes,
+compiled target and proof result. The installer explicitly used `nix --offline
+copy`, disabled substitutions/builders and asserted no IPv4 default route.
+The QEMU default NIC was nevertheless present in that historical test;
+`networkingOptions = []` alone did not remove it. Earlier evidence wording
+claiming zero guest NICs has been corrected. Future harness runs explicitly
+pass `-nic none`. The final release ISO's independent EFI boot probe did use
+`-nic none` and checked the complete bundled target closure without host shares.

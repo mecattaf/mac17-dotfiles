@@ -1,0 +1,26 @@
+.imagine-onboarding-layer{position:fixed;z-index:1500;display:grid;place-items:center;pointer-events:none;color:#d8d8d8;font-family:inherit;font-size:14px;line-height:1.5}
+.imagine-onboarding{pointer-events:auto;box-sizing:border-box;width:min(640px,calc(100% - 48px));max-height:calc(100% - 48px);overflow:auto;background:#000;border:1px solid #303030;border-radius:6px;padding:20px;font-family:inherit}
+.imagine-onboarding *{box-sizing:border-box}
+.imagine-onboarding header,.imagine-onboarding footer,.imagine-onboarding footer>div,.imagine-onboarding-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.imagine-onboarding h1{font-size:16px;font-weight:600;margin:0}
+.imagine-onboarding h2{font-size:18px;font-weight:600;margin:0 0 12px}
+.imagine-onboarding p{margin:12px 0}
+.imagine-onboarding main{padding:20px 0}
+.imagine-onboarding button,.imagine-onboarding select{font:inherit;color:inherit;border:1px solid #444;background:#171717;border-radius:4px;padding:7px 12px;cursor:pointer}
+.imagine-onboarding button:hover:not(:disabled){background:#252525}
+.imagine-onboarding button:disabled{opacity:.5;cursor:default}
+.imagine-onboarding button:focus-visible,.imagine-onboarding select:focus-visible,.imagine-onboarding input:focus-visible{outline:2px solid #d8d8d8;outline-offset:2px}
+.imagine-onboarding-step{display:flex;align-items:center;gap:12px;margin-top:20px}
+.imagine-onboarding-step select{flex:1;min-width:0}
+.imagine-onboarding-actions{justify-content:flex-start;flex-wrap:wrap;margin:16px 0}
+.imagine-onboarding-confirm{display:flex;align-items:flex-start;gap:10px;margin:18px 0;cursor:pointer}
+.imagine-onboarding-confirm input{margin-top:4px;accent-color:#a0a0a0}
+.imagine-onboarding-status,.imagine-onboarding-return{color:#b8b8b8}
+.imagine-onboarding .imagine-onboarding-return{font-size:12px;margin:16px 0 0;border-top:1px solid #303030;padding-top:12px}
+.imagine-onboarding .imagine-onboarding-link{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.imagine-onboarding-error{border-left:2px solid #b5a397;padding-left:12px}
+.imagine-onboarding-review{list-style:none;padding:0;margin:16px 0}
+.imagine-onboarding-review li{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #303030;padding:6px 0}
+.imagine-onboarding-review button{background:none;border:0;padding-left:0;text-align:left}
+.imagine-onboarding-review span{font-size:12px;color:#b8b8b8}
+@media(max-width:560px){.imagine-onboarding{width:calc(100% - 24px);max-height:calc(100% - 24px);padding:16px}.imagine-onboarding footer{align-items:flex-start;flex-direction:column}.imagine-onboarding footer>div{align-self:flex-end}}

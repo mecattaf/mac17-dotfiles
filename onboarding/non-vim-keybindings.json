@@ -1,0 +1,85 @@
+{
+  "status": "recommended-semantic-bindings-not-an-installed-keymap",
+  "mod": "Meta (the Mac Command key)",
+  "defaults": {
+    "terminalEditor": "nano",
+    "browser": "Google Chrome",
+    "terminal": "Kitty",
+    "vimMode": false
+  },
+  "bindings": [
+    {
+      "chord": "Meta+Return",
+      "action": "terminal.local.open"
+    },
+    {
+      "chord": "Meta+Space",
+      "action": "finder.toggle"
+    },
+    {
+      "chord": "Meta+b",
+      "action": "rail.toggle"
+    },
+    {
+      "chord": "Meta+Left",
+      "action": "focus.left"
+    },
+    {
+      "chord": "Meta+Right",
+      "action": "focus.right"
+    },
+    {
+      "chord": "Meta+Up",
+      "action": "focus.up"
+    },
+    {
+      "chord": "Meta+Down",
+      "action": "focus.down"
+    },
+    {
+      "chord": "Meta+Shift+Left",
+      "action": "window.move.left"
+    },
+    {
+      "chord": "Meta+Shift+Right",
+      "action": "window.move.right"
+    },
+    {
+      "chord": "Meta+Shift+Up",
+      "action": "window.move.up"
+    },
+    {
+      "chord": "Meta+Shift+Down",
+      "action": "window.move.down"
+    },
+    {
+      "chord": "Meta+1..9",
+      "action": "workspace.select"
+    },
+    {
+      "chord": "Meta+Shift+1..9",
+      "action": "window.move.workspace"
+    },
+    {
+      "chord": "Meta+f",
+      "action": "window.fullscreen.toggle"
+    }
+  ],
+  "preserveApplicationBindings": [
+    "Control+n",
+    "Control+Shift+n",
+    "Control+l",
+    "Control+t",
+    "Control+w",
+    "Control+c",
+    "Control+v",
+    "Control+Shift+c",
+    "Control+Shift+v"
+  ],
+  "notes": [
+    "Bind with the installed public Domicile command helpers; validate normalized ownership with ownedChords.",
+    "Read stock defaults at the pinned SDK: remove inherited h/j/k/l navigation and modal Vim modes instead of spreading DEFAULT_KEYBINDINGS blindly.",
+    "Mouse, touchpad and application controls remain available; the tour never requires remembered chords.",
+    "Do not reuse Tom\u2019s global Control+n launcher or his NAS terminal launcher for Tarek\u2019s standalone laptop."
+  ]
+}

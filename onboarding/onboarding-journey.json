@@ -1,0 +1,358 @@
+{
+  "schemaVersion": 1,
+  "status": "design-data-not-a-running-onboarding-ui",
+  "audience": "Tarek Mahmoud, MacBookPro14,3",
+  "statePath": "$XDG_STATE_HOME/imagine/onboarding/state.json",
+  "schemaNotes": [
+    "Actions are stable identifiers resolved by reviewed host adapters; the manifest never supplies arbitrary shell commands.",
+    "Persist only step versions, states, timestamps and coarse non-secret results.",
+    "Keep credentials in each application\u2019s mutable native store; keep root Wi-Fi and Tailscale state separate.",
+    "First account action is Chrome profile sign-in, after a connection exists.",
+    "Later/skipped is distinct from verified complete.",
+    "A lease belongs to a running adapter process so reopening cannot start duplicate logins.",
+    "Re-probe live state when reopening; never treat the mere presence of a token file as signed in."
+  ],
+  "displayOrder": [
+    "network",
+    "chrome",
+    "tailscale",
+    "manager",
+    "github",
+    "claude",
+    "dsh",
+    "cloudflare",
+    "hardware",
+    "launcher",
+    "workspaces",
+    "kitty",
+    "touchbar",
+    "design",
+    "finish"
+  ],
+  "steps": [
+    {
+      "id": "network",
+      "phase": "connection",
+      "title": "Connect to Wi-Fi",
+      "required": true,
+      "requires": [],
+      "action": "network.open",
+      "completion": {
+        "kind": "probe",
+        "probe": "network.internet"
+      },
+      "body": "Choose your network and enter its password. The desktop and applications are already installed. If Ethernet is connected, continue.",
+      "touchbar": [
+        "Back",
+        "Next"
+      ],
+      "notes": "Use the existing Domicile NetworkManager control and captive portal. Keep the password in NetworkManager, outside this manifest and the Nix store."
+    },
+    {
+      "id": "chrome",
+      "phase": "accounts",
+      "title": "Sign in to Chrome",
+      "required": true,
+      "requires": [
+        "network"
+      ],
+      "action": "chrome.open-profile",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "My Chrome profile is signed in and my saved information is available."
+      },
+      "body": "Open Chrome\u2019s profile button and sign in with your own Google Account. Check that your bookmarks and saved passwords are available.",
+      "touchbar": [
+        "Open Chrome",
+        "Back",
+        "Continue"
+      ],
+      "notes": "This is the first account step. Do not inspect Chrome cookies or profile databases to infer completion. Do not force synchronization or overwrite an existing profile."
+    },
+    {
+      "id": "tailscale",
+      "phase": "management",
+      "title": "Connect your Tailscale account",
+      "required": true,
+      "requires": [
+        "chrome"
+      ],
+      "action": "tailscale.login",
+      "completion": {
+        "kind": "probe",
+        "probe": "tailscale.owner-connected"
+      },
+      "body": "Sign in using the account that will own this computer. This makes it reachable for managed updates.",
+      "touchbar": [
+        "Open sign-in",
+        "Back",
+        "Continue"
+      ],
+      "notes": "Use browser authentication. No reusable auth key, copied node state, or Tom account in the USB image."
+    },
+    {
+      "id": "manager",
+      "phase": "management",
+      "title": "Invite Tom",
+      "required": true,
+      "requires": [
+        "tailscale"
+      ],
+      "action": "tailscale.open-users",
+      "completion": {
+        "kind": "external-verification",
+        "probe": "management.reachable",
+        "acknowledgement": "Tom has accepted the invitation."
+      },
+      "body": "Invite Tom to your Tailscale account with the agreed management role. He can then finish maintenance and verify remote access.",
+      "touchbar": [
+        "Open Tailscale",
+        "Back",
+        "Continue"
+      ],
+      "notes": "Membership invitation and machine sharing are different. The final choice of role and SSH policy belongs to the management configuration. Never assume clicking Invite proves remote reachability."
+    },
+    {
+      "id": "github",
+      "phase": "accounts",
+      "title": "Connect GitHub",
+      "required": true,
+      "requires": [
+        "chrome"
+      ],
+      "action": "github.login",
+      "completion": {
+        "kind": "probe",
+        "probe": "github.expected-owner",
+        "expectedLogin": "tarekcmahmoud"
+      },
+      "body": "Authorize GitHub CLI as tarekcmahmoud and accept the mac17-dotfiles repository invitation.",
+      "touchbar": [
+        "Open GitHub",
+        "Back",
+        "Continue"
+      ],
+      "notes": "Keep Git identity and GitHub authentication separate. Validate the authenticated login. Existing repository belongs to mecattaf until Tom transfers it."
+    },
+    {
+      "id": "claude",
+      "phase": "agents",
+      "title": "Connect Claude Code",
+      "required": true,
+      "requires": [
+        "chrome"
+      ],
+      "action": "claude.login",
+      "completion": {
+        "kind": "probe",
+        "probe": "claude.signed-in"
+      },
+      "body": "Sign in to your own Claude account in Chrome. The CLI keeps its sign-in on this computer.",
+      "touchbar": [
+        "Open sign-in",
+        "Back",
+        "Continue"
+      ],
+      "notes": "Use the installed CLI\u2019s official auth flow. Avoid resetting mutable auth state during Nix activation. Do not seed Tom\u2019s credentials."
+    },
+    {
+      "id": "dsh",
+      "phase": "agents",
+      "title": "Start your first DSH session",
+      "required": true,
+      "requires": [
+        "claude"
+      ],
+      "action": "dsh.first-session",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "I sent a message and received a response."
+      },
+      "body": "Open your assistant, send a short message, and try returning to the same session after closing its window.",
+      "touchbar": [
+        "Open assistant",
+        "Back",
+        "Continue"
+      ],
+      "notes": "DSH session lifecycle is owned by dshd. The onboarding teaches attachment and resume; it must not create a second process supervisor."
+    },
+    {
+      "id": "cloudflare",
+      "phase": "accounts",
+      "title": "Connect Cloudflare",
+      "required": false,
+      "requires": [
+        "chrome"
+      ],
+      "action": "cloudflare.login",
+      "completion": {
+        "kind": "probe",
+        "probe": "cloudflare.account-present"
+      },
+      "body": "Create or sign in to your own Cloudflare account, then authorize Wrangler. You can finish this later.",
+      "touchbar": [
+        "Open Cloudflare",
+        "Later",
+        "Continue"
+      ],
+      "notes": "A Cloudflare account is not required to boot or use the local desktop. Do not imply it is a prerequisite for Wi-Fi or Chrome."
+    },
+    {
+      "id": "hardware",
+      "phase": "device",
+      "title": "Check your MacBook",
+      "required": true,
+      "requires": [],
+      "action": "hardware.open-checks",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "Keyboard, trackpad, Wi-Fi, camera, audio and Touch Bar have been checked."
+      },
+      "body": "Try typing, moving the pointer, playing a quiet sound, opening the camera, and pressing the Touch Bar controls.",
+      "touchbar": [
+        "Esc",
+        "Quiet audio test",
+        "Continue"
+      ],
+      "notes": "Run audio through PipeWire at low volume. Sleep/wake is a separate physical acceptance check. The UI should show unresolved hardware facts rather than marking success from loaded modules alone."
+    },
+    {
+      "id": "launcher",
+      "phase": "tour",
+      "title": "Find an application",
+      "required": false,
+      "requires": [
+        "chrome"
+      ],
+      "action": "tour.launcher",
+      "completion": {
+        "kind": "event",
+        "event": "tour.launcher.used"
+      },
+      "body": "Open Finder, type Chrome, and open it. Everything is also available with the pointer.",
+      "touchbar": [
+        "Open Finder",
+        "Back",
+        "Next"
+      ],
+      "notes": "Consume the existing Imagine action/reducer event. Do not infer success from a screenshot."
+    },
+    {
+      "id": "workspaces",
+      "phase": "tour",
+      "title": "Arrange your workspace",
+      "required": false,
+      "requires": [
+        "launcher"
+      ],
+      "action": "tour.workspaces",
+      "completion": {
+        "kind": "event",
+        "event": "tour.workspace.changed"
+      },
+      "body": "Open the workspace rail and move between two workspaces. Try the arrow-key shortcuts if you prefer the keyboard.",
+      "touchbar": [
+        "Workspace 1",
+        "Workspace 2",
+        "Next"
+      ],
+      "notes": "No Vim motions. Read display identities from this machine; no Zenbook Duo panel names."
+    },
+    {
+      "id": "kitty",
+      "phase": "tour",
+      "title": "Use the terminal",
+      "required": false,
+      "requires": [
+        "workspaces"
+      ],
+      "action": "tour.terminal",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "I can open Kitty, copy and paste, and leave the terminal."
+      },
+      "body": "Open Kitty. Copy and paste with Ctrl+Shift+C and Ctrl+Shift+V. Ctrl+C cancels a running command. Nano is the initial terminal editor.",
+      "touchbar": [
+        "Open Kitty",
+        "Copy",
+        "Paste",
+        "Next"
+      ],
+      "notes": "Never put a password or OAuth code in Touch Bar labels. Preserve ordinary Chrome Ctrl shortcuts; no global Control+n override."
+    },
+    {
+      "id": "touchbar",
+      "phase": "tour",
+      "title": "Make the Touch Bar useful",
+      "required": false,
+      "requires": [
+        "hardware",
+        "workspaces"
+      ],
+      "action": "tour.touchbar",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "I tried the default controls and know how to return to Esc and function keys."
+      },
+      "body": "Use the Touch Bar for brightness, quiet volume, workspace switching and opening your assistant. Esc and the function row stay available.",
+      "touchbar": [
+        "Esc",
+        "Brightness",
+        "Volume",
+        "Workspaces",
+        "Assistant"
+      ],
+      "notes": "Baseline functional row is independent of custom DRM rendering. Programmable controls follow the same Imagine commands as keyboard and pointer actions, and obey the lock screen."
+    },
+    {
+      "id": "design",
+      "phase": "contribution",
+      "title": "Shape your desktop",
+      "required": false,
+      "requires": [
+        "github",
+        "workspaces"
+      ],
+      "action": "design.open-workspace",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "I know where to change the shell and preview a change."
+      },
+      "body": "Open the Imagine design workspace, review a small example change, and use the preview before adopting it on your desktop.",
+      "touchbar": [
+        "Open project",
+        "Preview",
+        "Later",
+        "Done"
+      ],
+      "notes": "A matched source/engine pin and isolated preview are required. NixOS system changes and hot-reloadable shell presentation have different lifecycles."
+    },
+    {
+      "id": "finish",
+      "phase": "finish",
+      "title": "Your computer is ready",
+      "required": true,
+      "requires": [
+        "chrome",
+        "tailscale",
+        "manager",
+        "github",
+        "claude",
+        "dsh",
+        "hardware"
+      ],
+      "action": "onboarding.finish",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "Finish setup"
+      },
+      "body": "Your browser and assistant are ready. Reopen setup from Finder whenever you want to finish an optional step.",
+      "touchbar": [
+        "Open Chrome",
+        "Open assistant",
+        "Done"
+      ],
+      "notes": "Completed setup must remain resumable. Authentication expiration changes status; it must not rerun destructive installation or reset all setup choices."
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "repository": "esodesod/nixos",
+    "commit": "69ee0b781a53a94c873be0e02e69db274d14d521",
+    "modelEvidence": "direct",
+    "license": null
+  },
+  {
+    "repository": "wobbier/nix",
+    "commit": "a13858a1d7eaa81f2603b8e936933e23c8b2857f",
+    "modelEvidence": "direct",
+    "license": null
+  },
+  {
+    "repository": "archaengel/systemConf",
+    "commit": "71607890df8b1e7bbb6626e300fab08bc3278d58",
+    "modelEvidence": "direct",
+    "license": null
+  },
+  {
+    "repository": "gilescope/dotgiles",
+    "commit": "88231102121642b5f2361c88f2a6869d7f24a6ad",
+    "modelEvidence": "direct",
+    "license": "Unlicense"
+  },
+  {
+    "repository": "rehno-lindeque/wip",
+    "commit": "009137325b1c554b18a291ff7c7f966a91361fd4",
+    "modelEvidence": "2017 AMD model inference",
+    "license": null
+  }
+]

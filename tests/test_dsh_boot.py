@@ -74,13 +74,14 @@ def main():
                 assert (profile / "package.json").is_file()
                 assert not profile.is_symlink()
                 assert not (profile / "cordis.patch.yml").is_symlink()
-                print(json.dumps({
+                assert process.poll() is None, "native DSH exited after becoming ready"
+                result = {
                     "version": version,
                     "webReady": True,
                     "loopbackHTTP": 200,
                     "nativeWritableProfile": True,
                     "modelRequests": 0,
-                }))
+                }
             finally:
                 if process.poll() is None:
                     os.killpg(process.pid, signal.SIGTERM)
@@ -90,6 +91,11 @@ def main():
                         os.killpg(process.pid, signal.SIGKILL)
                         process.wait(timeout=5)
                         raise AssertionError("native DSH did not shut down after SIGTERM")
+                assert process.returncode in (0, -signal.SIGTERM), (
+                    f"native DSH ended unexpectedly: {process.returncode}"
+                )
+        result["cleanShutdown"] = True
+        print(json.dumps(result))
 
 
 if __name__ == "__main__":

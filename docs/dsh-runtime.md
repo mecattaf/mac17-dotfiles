@@ -23,6 +23,14 @@ the utility pin was `e2df6ab724c7953e9a61b47588386675581b8359`, current publishe
 means the version reviewed in this system generation, not a different upstream
 channel. The released image's `flake.lock` is the authority for its exact pins.
 
+The audit compared the locked source with Tom's clean local utility checkout
+at `a75495b29e1c003810f67899959922a81337a607`. The newer published source also
+supports `dshd run --patch FILE -- ...` and `--stdin FILE` for headless tasks.
+Those inputs are snapshotted into private instance state, so changing or
+deleting the original file does not silently change a later run. This is
+separate from DSH's live user-owned profiles. No utility source was copied
+into this dotfiles repository.
+
 This imports the current catalog's package set directly. It has
 `overlays.shared-nixpkgs`, not the `overlays.default` mentioned in old comments
 in Tom's dotfiles. Keep the catalog's own Nixpkgs pin and the configured signed
@@ -134,6 +142,7 @@ inspect the lock diff:
 ```sh
 nix flake update dshd
 git diff -- flake.lock
+jq '.nodes.dshd.locked | {rev, narHash, lastModified}' flake.lock
 ```
 
 For a catalog/DSH update, use `nix flake update llm-agents` instead. These are
@@ -150,6 +159,15 @@ checkout on strix-coordinator and use `fleet-exec`; do not compile on NAS or
 copy live account state to a builder. Push the reviewed source and lock update
 to GitHub. No extra updater daemon, timer, copied utility source or fork is
 needed; the same upstream utility supplies Tom and Tarek.
+
+The current utility reports version `0.1.0` across more than one source
+revision. Use the locked revision and actual store path, rather than
+`dshd --version` alone, to identify an installed update:
+
+```sh
+readlink -f /run/current-system/sw/bin/dshd
+dshd get work
+```
 
 A switch installs the new `dshd` CLI and release registry. It does **not**
 replace the DSH or `dshd-run` bytes of a running instance. Each release pins
@@ -191,6 +209,26 @@ state, signed catalog substitutes and separate update boundaries. Tarek's
 provider setup and shell integration use his own identity. Tom's fleet roles,
 account-slot rotations, private Gufo route and Master/scheduled worker profiles
 are not prerequisites for using his laptop.
+
+## Validation
+
+`tests/agent-runtime.nix` evaluates the actual host configuration without
+starting an instance. It checks the common DSH package, available pnpm,
+valid permission mode, session-preserving static template, absence of
+automatic instances, mutable DSH state and excluded creator/token variables.
+
+`tests/test_dsh_boot.py` starts the actual pinned native CLI against a fresh
+temporary DSH home and project folder with an allowlisted environment. On the
+build host, run it through `~/.local/bin/runtime-test -- python3
+tests/test_dsh_boot.py --dsh /nix/store/…-dsh-…/bin/dsh`. It verifies loopback
+Web readiness, the launch-token/cookie authentication handshake, HTTP 200,
+a writable native profile and clean shutdown, without a model request or
+account login. Keep the target wrapper in the command even over SSH.
+
+Both checks passed on 2026-11-15 against DSH 0.2.2-rc.3. The startup test ran
+on strix-coordinator. It does not establish provider quota, a paid login,
+ACP resume, or full dshd lifecycle behavior with a real model; upstream's
+unit/contract/VM checks cover its supervisor contract separately.
 
 Sources inspected at the pinned revisions:
 

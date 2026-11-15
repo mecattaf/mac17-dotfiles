@@ -1,0 +1,28 @@
+{
+   "partitiontable": {
+      "label": "dos",
+      "id": "0x9e47c70c",
+      "device": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer/iso/mac17-installer.iso",
+      "unit": "sectors",
+      "sectorsize": 512,
+      "partitions": [
+         {
+            "node": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer/iso/mac17-installer.iso1",
+            "start": 0,
+            "size": 34816,
+            "type": "0",
+            "bootable": true
+         },{
+            "node": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer/iso/mac17-installer.iso2",
+            "start": 236,
+            "size": 32768,
+            "type": "ef"
+         },{
+            "node": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer/iso/mac17-installer.iso3",
+            "start": 34816,
+            "size": 1048576,
+            "type": "c"
+         }
+      ]
+   }
+}

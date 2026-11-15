@@ -2,12 +2,13 @@
 
 A fresh NixOS configuration for the **15-inch 2017 MacBook Pro, MacBookPro14,3
 (A1707, Apple T1)**. The prepared USB contains the installed system's complete
-closure: Imagine on Domicile, Chrome, Kitty, Claude Code, DSH, GitHub CLI and
+closure: Imagine on Domicile, Chrome, Kitty, free AI clients, optional Claude
+Code, DSH, GitHub CLI and
 Cloudflare Wrangler, alongside native Mac hardware packages.
 
 The current input is NixOS unstable, locked to a reviewed revision, with
 `linuxPackages_latest`: **Linux 7.3.4** on 15 November 2026. Imagine is derived
-from Manganese and is being extracted into [agency-agency/imagine](https://github.com/agency-agency/imagine).
+from Manganese and comes from [agency-agency/imagine](https://github.com/agency-agency/imagine).
 No device uses another person's accounts, private keys or personalized firmware.
 
 ## Start here
@@ -16,6 +17,9 @@ No device uses another person's accounts, private keys or personalized firmware.
 - **Tom:** [Build and release](docs/BUILD-AND-RELEASE.md).
 - [Research and source comparisons](docs/research/).
 - [Lessons from Tom's system](docs/research/tom-dotfiles.md).
+- [Free AI accounts and working entry points](docs/free-ai.md).
+- [DSH and maintained dshd updates](docs/dsh-runtime.md).
+- [Retina display preferences](docs/retina-display.md).
 
 Release assets are published with a source revision and SHA-256 checksum.
 Build success and real Mac hardware acceptance are recorded separately.

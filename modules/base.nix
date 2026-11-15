@@ -20,6 +20,7 @@ in {
   users.users.tarek = {
     isNormalUser = true;
     description = "Tarek Mahmoud";
+    linger = true;
     extraGroups = [ "wheel" "networkmanager" "domicile" ];
     shell = pkgs.fish;
     # The installer asks for his password locally. There is no factory login.
@@ -33,7 +34,7 @@ in {
   };
   environment.systemPackages = with pkgs; [
     git gh curl jq ripgrep unzip nano networkmanager
-    agents.claude-code agents.dsh wrangler
+    agents.claude-code wrangler
   ];
 
   networking.networkmanager.enable = true;
@@ -75,17 +76,6 @@ in {
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
   console = { font = "ter-v24n"; packages = [ pkgs.terminus_font ]; };
-
-  # Instances and provider settings remain mutable DSH-owned runtime data.
-  dshd = {
-    enable = true;
-    releases.stable = {
-      dsh = agents.dsh;
-      environment.DSH_PERMISSION_MODE = "default";
-      unsetEnvironment = [ "CLAUDECODE" "CLAUDE_CODE_ENTRYPOINT" ];
-    };
-    defaultRelease = "stable";
-  };
 
   home-manager = {
     useGlobalPkgs = true;

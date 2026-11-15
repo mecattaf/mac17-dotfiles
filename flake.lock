@@ -75,7 +75,6 @@
       "original": {
         "owner": "cprussin",
         "repo": "domicile",
-        "rev": "8115d932b41be551ca7769fc2e89e323e5692c8c",
         "type": "github"
       }
     },
@@ -96,7 +95,6 @@
       "original": {
         "owner": "mecattaf",
         "repo": "dshd.nix",
-        "rev": "e2df6ab724c7953e9a61b47588386675581b8359",
         "type": "github"
       }
     },
@@ -160,7 +158,29 @@
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a1293da7dd8e497e08d26173f97e2976b36a31ea",
+        "type": "github"
+      }
+    },
+    "imagine": {
+      "inputs": {
+        "domicile": [
+          "domicile"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794775064,
+        "narHash": "sha256-lhwhraDt7XMSKQzbdaCVSGT6dZPQTW6bRu6QEQyIv4c=",
+        "owner": "agency-agency",
+        "repo": "imagine",
+        "rev": "8f2dae3b0c13091dd30630516eed49292516f317",
+        "type": "github"
+      },
+      "original": {
+        "owner": "agency-agency",
+        "repo": "imagine",
         "type": "github"
       }
     },
@@ -183,7 +203,6 @@
       "original": {
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "aeb1afe1529c5dc7dcdc54d644a8aed212d99dd0",
         "type": "github"
       }
     },
@@ -231,8 +250,8 @@
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d5cc6833999746cffdfe0598f7bc801a57b887a9",
-        "type": "github"
+        "type": "github",
+        "ref": "nixos-unstable"
       }
     },
     "root": {
@@ -240,6 +259,7 @@
         "domicile": "domicile",
         "dshd": "dshd",
         "home-manager": "home-manager",
+        "imagine": "imagine",
         "llm-agents": "llm-agents",
         "nixpkgs": "nixpkgs_3"
       }

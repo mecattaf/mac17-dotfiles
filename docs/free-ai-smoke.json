@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "checkedAt": "2026-11-15",
+  "client": "official OpenCode 1.19.5",
+  "model": "opencode/deepseek-v4.1-flash-free",
+  "environment": "fresh home and XDG directories inside compute runtime-test",
+  "apiKeyProvided": false,
+  "desktopKeyringAccessible": false,
+  "inheritedProviderCredentials": false,
+  "serviceResponse": "free usage limit reached",
+  "assistantReplyReceived": false,
+  "nativeClientExitedBeforeTimeout": false,
+  "timeoutSeconds": 90,
+  "paidFallbackEnabled": false,
+  "conclusion": "Official anonymous support exists, but a working anonymous allowance is not established. Primary setup uses Tarek's own personal Google OAuth in native Antigravity and requires an actual reply acknowledgment."
+}

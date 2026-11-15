@@ -1,6 +1,9 @@
 // Tarek's device-independent Imagine entry; native output discovery remains on.
 import type { ThemeConfig } from "@domicile-desktop/sdk/config";
+import type { Shell as DomicileShell } from "@domicile-desktop/sdk/shell";
+import { KeyAction } from "@domicile-desktop/sdk/key-action";
 import { runImagine } from "./imagine/src/index";
+import { observeMac17Displays } from "./imagine/src/mac17/display-observer";
 import {
   DEFAULT_KEYBINDINGS, brightness, clipboard, exec, focus, fullscreen,
   launcher, lock, move, screenshot, volume,
@@ -29,6 +32,7 @@ const keybindings = {
   "Meta+f": fullscreen(),
   "Meta+v": clipboard(),
   "Meta+Control+l": lock(),
+  "Meta+Shift+o": KeyAction.SendShell(["imagine", "onboarding", "open"]),
   "Meta+Shift+s": screenshot(),
   XF86MonBrightnessDown: brightness("down"),
   XF86MonBrightnessUp: brightness("up"),
@@ -38,11 +42,16 @@ const keybindings = {
 };
 ownedChords({ keybindings });
 
-export const Shell = runImagine({
+const imagineShell = runImagine({
   webBrowser: { command: ["mac17-browser"] },
   layoutPersistence: { identity: "tarek-mac17-layout-v1" },
+  onboarding: { helper: ["/run/current-system/sw/bin/mac17-onboarding"] },
   keybindings: { keybindings },
 });
+export const Shell: DomicileShell = (root, domicile) => {
+  observeMac17Displays(domicile);
+  imagineShell(root, domicile);
+};
 export const shell_options = { font: "Inter", nightLight: { schedule: "off" } };
 export const theme: ThemeConfig = {
   mode: "dark", accent_color: "#555451", cursor_size: 24,

@@ -13,6 +13,7 @@ import json
 import os
 from pathlib import Path
 import secrets
+import re
 import stat
 import subprocess
 import sys
@@ -25,10 +26,10 @@ STATUSES = {"pending", "complete", "deferred"}
 HOST_ACTIONS = {"network.open", "tour.launcher", "tour.workspaces"}
 NATIVE_ACTIONS = {
     "chrome.open-profile", "keyring.open", "tailscale.login", "tailscale.open-users",
-    "github.login", "claude.login", "dsh.first-session", "cloudflare.login",
+    "github.login", "github.open-repository", "ai.first-session", "claude.login", "dsh.first-session", "cloudflare.login",
     "hardware.open-checks", "tour.terminal", "tour.touchbar", "design.open-workspace",
 }
-TASKS = {"tailscale.login", "github.login", "claude.login", "dsh.first-session", "cloudflare.login", "hardware.open-checks"}
+TASKS = {"tailscale.login", "github.login", "ai.first-session", "claude.login", "dsh.first-session", "cloudflare.login", "hardware.open-checks"}
 
 class Refused(Exception):
     pass
@@ -165,8 +166,15 @@ def probe(identifier):
         expected = step_for("github").get("completion", {}).get("expectedLogin")
         if not login or len(login) > 100 or any(not (c.isalnum() or c == "-") for c in login):
             return {"state": "unavailable", "message": "GitHub returned an unexpected account identity."}
-        return {"state": "ready" if login == expected else "wrong-account", "message":
-                f"Signed in as {login}." if login == expected else f"Signed in as {login}; use {expected}."}
+        if login != expected:
+            return {"state": "wrong-account", "message": f"Signed in as {login}; use {expected}."}
+        repository = os.environ.get("MAC17_REPOSITORY", "mecattaf/mac17-dotfiles")
+        if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository):
+            return {"state": "unavailable", "message": "The managed repository is not configured correctly."}
+        access = run([command("gh"), "api", "repos/" + repository, "--jq", ".permissions.push"])
+        if access is None or access.returncode or access.stdout.strip() != "true":
+            return {"state": "invite-pending", "message": f"Signed in as {login}. Accept the dotfiles repository invitation, then check again."}
+        return {"state": "ready", "message": f"Signed in as {login}, with access to your dotfiles repository."}
     if identifier == "claude":
         found = run([command("claude"), "auth", "status"])
         try:
@@ -176,6 +184,8 @@ def probe(identifier):
         if value.get("loggedIn") is True:
             return {"state": "ready", "message": "Claude Code reports a signed-in account."}
         return {"state": "signed-out", "message": "Sign in with your own Claude account."}
+    if identifier == "free-ai":
+        return {"state": "manual", "message": "Sign in to the native free assistant and confirm only after receiving a reply. Client installation alone does not verify an account or available quota."}
     if identifier == "cloudflare":
         found = run([command("wrangler"), "whoami"], 20)
         if found is None:
@@ -250,10 +260,10 @@ def launch(action):
     if action not in NATIVE_ACTIONS:
         raise Refused("That setup action is not supported by the host.")
     if action != "keyring.open":
-        step = next((s for s in manifest()["steps"] if s["action"] == action), None)
+        step = step_for("github") if action == "github.open-repository" else next((s for s in manifest()["steps"] if s["action"] == action), None)
         if step is None or not dependencies_ready(step, state()):
             raise Refused("Finish the earlier setup step before starting this action.")
-    if action in {"chrome.open-profile", "tailscale.open-users"} and not keyring_ready():
+    if action in {"chrome.open-profile", "tailscale.open-users", "github.open-repository", "ai.first-session"} and not keyring_ready():
         raise Refused("The login keyring is not ready. Open Passwords and Keys to create or unlock the login keyring, then retry Chrome.")
     if action in TASKS:
         with state_lock():
@@ -268,6 +278,11 @@ def launch(action):
                 sys.executable, str(Path(__file__).resolve()), "--worker", action, nonce]
     elif action == "chrome.open-profile":
         argv = [command("browser")]
+    elif action == "github.open-repository":
+        repository = os.environ.get("MAC17_REPOSITORY", "mecattaf/mac17-dotfiles")
+        if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository):
+            raise Refused("The managed repository is not configured correctly.")
+        argv = [command("browser"), "https://github.com/" + repository + "/invitations"]
     elif action == "tailscale.open-users":
         argv = [command("browser"), "https://login.tailscale.com/admin/users"]
     elif action == "keyring.open":
@@ -304,6 +319,7 @@ def worker(action, nonce):
         "tailscale.login": [command("sudo"), command("tailscale"), "up", "--operator", "tarek"],
         "github.login": [command("gh"), "auth", "login", "--hostname", "github.com", "--git-protocol", "https", "--web"],
         "claude.login": [command("claude"), "auth", "login"],
+        "ai.first-session": [command("ai"), "setup"],
         "cloudflare.login": [command("wrangler"), "login"],
     }
     exit_code = 1

@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "guest_kernel": "7.3.4",
+  "nixpkgs_revision": "d5cc6833999746cffdfe0598f7bc801a57b887a9",
+  "installer_sha256": "da83148e925d916f9c913d6c8adfed303df0e9a3066bb08b42ff635cacc970fd",
+  "target_system": "/nix/store/ihfkfnws7ydy5ph91vr6qz1yzs9z1i5d-nixos-system-mac17-fixture-target-26.11.20261113.d5cc683",
+  "target_closure_size": "1.3 GiB",
+  "target_kind": "minimal real system, exact production storage-contract",
+  "test_derivation": "/nix/store/yxsl2px4ha9fs6aw5zfsba6fjaamz30l-vm-test-run-mac17-installer-disposable-disks.drv",
+  "test_result": "/nix/store/s9h3cz1n8nvfym6v7vy794pzyygf1l4s-vm-test-run-mac17-installer-disposable-disks",
+  "runtime_seconds": 221.95,
+  "summaries": [
+    "[39.20s] (finished: subtest: plan performs zero writes to the selected disk, in 1.02 seconds)",
+    "[39.71s] (finished: subtest: wrong disk model is refused, in 0.50 seconds)",
+    "[40.23s] (finished: subtest: wrong machine model is refused, in 0.52 seconds)",
+    "[48.03s] (finished: subtest: incorrect erase phrase leaves target unchanged, in 7.80 seconds)",
+    "[53.16s] (finished: subtest: mismatching encryption passphrases leave target unchanged, in 5.13 seconds)",
+    "[221.90s] (finished: subtest: real install from the local prepared closure without networking, in 168.74 seconds)",
+    "[221.95s] test script finished in 221.95s"
+  ],
+  "isolation": "NixOS QEMU guest under runtime-test --allow-kvm on strix-coordinator; synthetic-only disk images; zero host block devices; no guest network device; substitutions/builders disabled",
+  "not_tested": [
+    "physical Apple boot/hardware",
+    "reboot of installed target",
+    "final desktop closure (pending)",
+    "optional USB helper proof (pending)"
+  ]
+}

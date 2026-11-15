@@ -6,7 +6,7 @@ This is the background owner-action list, separate from the installation guide.
 - [x] Existing GitHub account identified: tarekcmahmoud.
 - [x] Private mac17-dotfiles repository created under mecattaf.
 - [x] Tarek collaborator invitation sent for mac17-dotfiles.
-- [x] Private agency-agency/imagine repository created.
+- [x] Public shared agency-agency/imagine repository created.
 - [x] Tarek contributor invitation sent for Imagine.
 - [ ] Accept both GitHub invitations.
 - [ ] Download the release ISO and checksum; flash a USB.
@@ -19,7 +19,7 @@ This is the background owner-action list, separate from the installation guide.
 - [ ] Share the Mac node with Tom's existing identity for management transport.
 - [ ] Verify manager connectivity and SSH host fingerprint.
 - [ ] Sign in to gh as tarekcmahmoud; set Git commit identity.
-- [ ] Sign in to own Claude account; configure DSH's own provider/account state.
+- [ ] Choose own free AI accounts and verify real requests; optional Claude login separately.
 - [ ] Create/use own Cloudflare account and authenticate Wrangler.
 - [ ] Record encrypted account-state backup and recovery-key location.
 - [ ] Complete physical hardware checks in the first-run experience.

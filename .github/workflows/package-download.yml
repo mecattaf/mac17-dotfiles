@@ -1,0 +1,47 @@
+name: Prepare ISO download
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release containing the built ISO parts
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Download and verify the built image
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9.]+$ ]] || exit 1
+          mkdir -p parts download
+          gh release download "$RELEASE_TAG" --repo "$REPOSITORY" --dir parts \
+            --pattern 'mac17-installer.iso.part-*' --pattern 'PARTS-SHA256SUMS' \
+            --pattern SHA256SUMS --pattern START-HERE.md --pattern BUILD-MANIFEST.json
+          (cd parts; sha256sum --check PARTS-SHA256SUMS)
+          cat parts/mac17-installer.iso.part-* > download/mac17-installer.iso
+          cp parts/SHA256SUMS parts/START-HERE.md parts/BUILD-MANIFEST.json download/
+          (cd download; sha256sum --check SHA256SUMS)
+          rm -rf parts
+      - name: Upload one downloadable ISO bundle
+        id: image
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mac17-installer
+          path: download/
+          compression-level: 0
+          retention-days: 7
+          if-no-files-found: error
+      - name: Link the download
+        env:
+          ARTIFACT_URL: ${{ steps.image.outputs.artifact-url }}
+        run: |
+          printf 'Download [mac17-installer](%s), extract the ZIP, verify SHA256SUMS, then flash mac17-installer.iso.\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"

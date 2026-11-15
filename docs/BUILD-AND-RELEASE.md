@@ -21,11 +21,40 @@ table/EFI boot data and test its boot and installer path in a disposable VM.
 The destructive installer must never run against a host disk during tests.
 Use the target `runtime-test` wrapper around runtime-sensitive tests.
 
-Name the download `mac17-nixos-YYYY-MM-DD.iso`, generate `SHA256SUMS` from that
-filename, and publish both on GitHub Releases using `gh`. Include the Tarek
-instructions as an asset so he can keep an offline copy. GitHub's per-release
-asset size limit must be checked against the finished ISO; do not publish a
-truncated file or mislabel a compressed file as an ISO.
+The build output is `result-iso/iso/mac17-installer.iso` and its `SHA256SUMS`.
+`packages.raw-iso` exposes the maintained base ISO; the default `iso` output
+replays its existing boot equipment and appends an initially empty 512 MiB
+FAT32 **MAC17SAVE** partition. The installer identifies that partition on the
+actual boot USB and saves firmware there before any erase. No personalized
+firmware or account state belongs in a downloadable image.
+
+GitHub Releases limits each asset to 2 GiB. For a larger image, preserve it as
+ordered `mac17-installer.iso.part-aa`, `part-ab`, ... assets below that limit,
+plus `PARTS-SHA256SUMS`, the complete image's `SHA256SUMS`, `START-HERE.md` and
+`BUILD-MANIFEST.json`. Do not flash a part. The manual **Prepare ISO download**
+workflow verifies the parts, reconstructs and checks the complete ISO, then
+publishes one **mac17-installer** artifact containing the image and guide.
+The workflow packages an already compiled image; it does not rebuild NixOS.
+Put its actual artifact link in the release notes. Tarek downloads and extracts
+that ZIP and flashes the `.iso` inside it. Private repository access requires
+accepting his invitation and signing in to GitHub before downloading.
+
+The convenient artifact expires after seven days. The release parts remain:
+rerun the workflow with the release tag to create a fresh artifact, or restore
+manually with GitHub CLI while signed in to an authorized account:
+
+```sh
+mkdir mac17-download
+cd mac17-download
+gh release download v2026.11.15 --repo mecattaf/mac17-dotfiles
+shasum -a 256 -c PARTS-SHA256SUMS
+cat mac17-installer.iso.part-* > mac17-installer.iso
+shasum -a 256 -c SHA256SUMS
+```
+
+The manifest records source and lock pins, compiled system, kernel, complete
+ISO size/hash and the validation performed. Source publication, VM success
+and actual physical Mac acceptance are distinct claims.
 
 ## Update shared software
 

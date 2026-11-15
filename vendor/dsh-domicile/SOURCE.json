@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "productionDonor": "mecattaf/dotfiles",
+  "productionRevision": "435e61f084fce5f4892dad608703eb10a5ad8d49",
+  "productionFiles": [
+    "client_helper.py",
+    "protocol.py"
+  ],
+  "stagedPlugin": "Existing dsh-domicile working source; exact hashes below; documented DSH0.2.1-rc.2 compatibility, no automatic registration",
+  "files": {
+    "README.md": "8da64ddb2a9c10776ae341cda643b901cd92aad7d8f2a8c7dc1b56dc9bccbe78",
+    "client_helper.py": "fb458c8f0caae8a31557e221572754907a20b331109811c6369d1174d9548cac",
+    "plugin/README.md": "d943d55a8171144f7fb4ce21db4f9e11bb9f5384e99de87cf277d5a407ebeab4",
+    "plugin/lib/index.mjs": "610369112f5018b2d98703faa1aa8a7f25ef07b9a8d53f28277bddc12bd118f9",
+    "plugin/lib/runner.mjs": "13df03a32332fb572de0598868acb0ffb9d64876f0bcb3c102718daef0397218",
+    "plugin/package.json": "79b8c19902926f380a9a6fd92c2e7c70fbc9e414d0561b0b321dfd8604b81651",
+    "plugin/tool_runner.py": "644b924ca3fd273664c27afa9b7bc4d12548a0b77d67831ebbe6d53623a5fe9e",
+    "protocol.py": "94520fd575e8cd51cd4ced1becaa944ab21e806ffb3080924051277d70e375a4",
+    "query.py": "33c182cb3da1eaebfe3d6901d19f5dbffd1710be15f471ae522d8b02b667902c"
+  },
+  "readme": "Host-owned provenance summary; original production operational-history README is not bundled."
+}

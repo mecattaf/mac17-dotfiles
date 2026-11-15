@@ -1,38 +1,43 @@
 { config, inputs, lib, pkgs, ... }:
 let
   domicile = config.programs.domicile.package;
-  checkedConfig = pkgs.runCommand "mac17-imagine-config" { nativeBuildInputs = [ pkgs.jq ]; } ''
-    set -euo pipefail
-    export HOME="$TMPDIR"
-    mkdir -p config
-    printf '%s\n' '// Imagine source: ${../vendor/imagine}' > config/domicile.tsx
-    cat ${../desktop/domicile.tsx} >> config/domicile.tsx
-    cp -R ${../vendor/imagine} config/imagine
-    chmod -R u+w config
-    ${domicile}/libexec/domicile/builder --evaluate config/domicile.tsx --cache "$TMPDIR/cache" > evaluated.log
-    cat evaluated.log
-    evaluated=$(jq -rR 'fromjson? | select(.step == "evaluated") | .config' evaluated.log)
-    test -n "$evaluated"
-    ${domicile}/bin/domicile check-config "$evaluated"
-    ${domicile}/libexec/domicile/builder --entry config/domicile.tsx --cache "$TMPDIR/cache"
-    mkdir -p "$out"
-    cp config/domicile.tsx "$out/"
-    cp -R config/imagine "$out/imagine"
+  displayConfig = pkgs.callPackage ../pkgs/display-config.nix { inherit domicile; };
+  sourceOverlay = pkgs.runCommand "imagine-mac17-source" { } ''
+    cp -R ${inputs.imagine.lib.source pkgs} "$out"
+    chmod -R u+w "$out"
+    mkdir -p "$out/src/mac17"
+    cp ${../desktop/display-observer.ts} "$out/src/mac17/display-observer.ts"
   '';
+  checkedConfig = inputs.imagine.lib.mkConfig {
+    inherit pkgs;
+    configSource = ../desktop/domicile.tsx;
+    domicilePackage = domicile;
+    source = sourceOverlay;
+  };
+  agents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+  onboarding = pkgs.callPackage ../pkgs/onboarding.nix {
+    freeAiPackage = config.programs.mac17FreeAI.package;
+    claudeCode = agents.claude-code;
+    dshdPackage = inputs.dshd.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  };
   chrome = pkgs.google-chrome.override {
     commandLineArgs = "--password-store=gnome-libsecret --ozone-platform=wayland";
   };
   browser = pkgs.writeShellApplication {
     name = "mac17-browser";
-    runtimeInputs = [ pkgs.glib pkgs.coreutils ];
+    runtimeInputs = [ pkgs.glib pkgs.coreutils pkgs.zenity ];
     text = ''
       # A browser login must not silently downgrade its credential storage.
       # Password-based PAM login starts and unlocks the login keyring.
-      locked=$(timeout 10 gdbus call --session --dest org.freedesktop.secrets \
+      if ! locked=$(timeout 10 gdbus call --session --dest org.freedesktop.secrets \
         --object-path /org/freedesktop/secrets/collection/login \
-        --method org.freedesktop.DBus.Properties.Get org.freedesktop.Secret.Collection Locked)
+        --method org.freedesktop.DBus.Properties.Get org.freedesktop.Secret.Collection Locked); then
+        locked=unavailable
+      fi
       if [ "$locked" != '(<false>,)' ]; then
         echo 'Unlock the login keyring before opening Chrome.' >&2
+        zenity --error --title='Chrome sign-in' \
+          --text='Open Passwords and Keys to create or unlock the login keyring, then try Chrome again.'
         exit 1
       fi
       exec ${chrome}/bin/google-chrome-stable "$@"
@@ -42,10 +47,11 @@ let
     set -euo pipefail
     export BROWSER=mac17-browser
     export EDITOR=nano VISUAL=nano NIXOS_OZONE_WL=1
-    export XDG_DATA_DIRS="${pkgs.glib.getSchemaDataDirPath pkgs.gsettings-desktop-schemas}:''${XDG_DATA_DIRS:-/run/current-system/sw/share}"
+    export PATH="/etc/profiles/per-user/tarek/bin:$HOME/.nix-profile/bin:/run/wrappers/bin:/run/current-system/sw/bin:$PATH"
+    export XDG_DATA_DIRS="/etc/profiles/per-user/tarek/share:${domicile}/share:${pkgs.glib.getSchemaDataDirPath pkgs.gsettings-desktop-schemas}:''${XDG_DATA_DIRS:-/run/current-system/sw/share}"
     ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
       PATH HOME BROWSER EDITOR VISUAL NIXOS_OZONE_WL XDG_DATA_DIRS
-    exec ${domicile}/bin/domicile --config "$HOME/.config/domicile/domicile.tsx"
+    exec ${domicile}/bin/domicile --config "$HOME/.config/domicile/domicile.json"
   '';
 in {
   options.programs.mac17Desktop.checkedConfig = lib.mkOption {
@@ -56,7 +62,7 @@ in {
   };
   config = {
     programs.domicile = { enable = true; miracast = false; };
-    environment.systemPackages = [ browser session chrome pkgs.libsecret ];
+    environment.systemPackages = [ browser session chrome onboarding displayConfig pkgs.libsecret ];
     services.dbus.packages = [ pkgs.nautilus ];
     services.greetd = {
       enable = true;
@@ -89,9 +95,10 @@ in {
           foreground = "#e6e6e6";
         };
       };
-      xdg.configFile = {
-        "domicile/domicile.tsx".source = "${checkedConfig}/domicile.tsx";
-        "domicile/imagine".source = "${checkedConfig}/imagine";
+      home.activation.stageMac17DisplayConfig = {
+        before = [ "linkGeneration" ];
+        after = [ "writeBoundary" ];
+        data = "run ${displayConfig}/bin/mac17-display-config stage --base ${checkedConfig}/domicile.json";
       };
       xdg.mimeApps = {
         enable = true;
@@ -113,6 +120,8 @@ in {
         categories = [ "Network" "WebBrowser" ];
         mimeType = [ "x-scheme-handler/http" "x-scheme-handler/https" "text/html" ];
       };
+      # Finder presents the guarded profile-preserving Chrome entry above.
+      xdg.desktopEntries.google-chrome = { name = "Google Chrome"; noDisplay = true; };
     };
   };
 }

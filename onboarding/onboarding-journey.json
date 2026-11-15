@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "status": "design-data-not-a-running-onboarding-ui",
+  "status": "implemented-source-awaiting-physical-acceptance",
   "audience": "Tarek Mahmoud, MacBookPro14,3",
   "statePath": "$XDG_STATE_HOME/imagine/onboarding/state.json",
   "schemaNotes": [
     "Actions are stable identifiers resolved by reviewed host adapters; the manifest never supplies arbitrary shell commands.",
     "Persist only step versions, states, timestamps and coarse non-secret results.",
-    "Keep credentials in each application\u2019s mutable native store; keep root Wi-Fi and Tailscale state separate.",
+    "Keep credentials in each application’s mutable native store; keep root Wi-Fi and Tailscale state separate.",
     "First account action is Chrome profile sign-in, after a connection exists.",
     "Later/skipped is distinct from verified complete.",
     "A lease belongs to a running adapter process so reopening cannot start duplicate logins.",
@@ -15,6 +15,7 @@
   "displayOrder": [
     "network",
     "chrome",
+    "free-ai",
     "tailscale",
     "manager",
     "github",
@@ -61,13 +62,34 @@
         "kind": "acknowledgement",
         "text": "My Chrome profile is signed in and my saved information is available."
       },
-      "body": "Open Chrome\u2019s profile button and sign in with your own Google Account. Check that your bookmarks and saved passwords are available.",
+      "body": "Open Chrome’s profile button and sign in with your own Google Account. Check that your bookmarks and saved passwords are available.",
       "touchbar": [
         "Open Chrome",
         "Back",
         "Continue"
       ],
       "notes": "This is the first account step. Do not inspect Chrome cookies or profile databases to infer completion. Do not force synchronization or overwrite an existing profile."
+    },
+    {
+      "id": "free-ai",
+      "phase": "agents",
+      "title": "Start a free AI assistant",
+      "required": false,
+      "requires": [
+        "chrome"
+      ],
+      "action": "ai.first-session",
+      "completion": {
+        "kind": "acknowledgement",
+        "text": "I received a reply using a free route without enabling paid billing."
+      },
+      "body": "Start Google Antigravity with your own personal Google Account. Free Individual access is supported, and paid-credit fallback is disabled. Official OpenCode free models are also available when their public quota allows. No Claude subscription is required.",
+      "touchbar": [
+        "Open free assistant",
+        "Later",
+        "Continue"
+      ],
+      "notes": "Native clients own OAuth and permission prompts. A real assistant reply is required for acknowledgement; installation or a login window alone is not success. API keys for optional providers go into DSH Settings → Models, never onboarding progress. See /etc/mac17/free-ai.md."
     },
     {
       "id": "tailscale",
@@ -137,8 +159,8 @@
     {
       "id": "claude",
       "phase": "agents",
-      "title": "Connect Claude Code",
-      "required": true,
+      "title": "Claude Code, if you use it",
+      "required": false,
       "requires": [
         "chrome"
       ],
@@ -147,28 +169,28 @@
         "kind": "probe",
         "probe": "claude.signed-in"
       },
-      "body": "Sign in to your own Claude account in Chrome. The CLI keeps its sign-in on this computer.",
+      "body": "Optional: connect your own Claude Code account if you already use it. Skip this step to work with the prepared free assistants instead.",
       "touchbar": [
         "Open sign-in",
         "Back",
         "Continue"
       ],
-      "notes": "Use the installed CLI\u2019s official auth flow. Avoid resetting mutable auth state during Nix activation. Do not seed Tom\u2019s credentials."
+      "notes": "Use the installed CLI’s official auth flow. Avoid resetting mutable auth state during Nix activation. Do not seed Tom’s credentials."
     },
     {
       "id": "dsh",
       "phase": "agents",
       "title": "Start your first DSH session",
-      "required": true,
+      "required": false,
       "requires": [
-        "claude"
+        "chrome"
       ],
       "action": "dsh.first-session",
       "completion": {
         "kind": "acknowledgement",
         "text": "I sent a message and received a response."
       },
-      "body": "Open your assistant, send a short message, and try returning to the same session after closing its window.",
+      "body": "Open DSH and use Settings → Models → Add model provider to connect your own free API provider. Send a short message, then try returning to the same session after closing its window. Claude is optional.",
       "touchbar": [
         "Open assistant",
         "Back",
@@ -294,15 +316,14 @@
         "kind": "acknowledgement",
         "text": "I tried the default controls and know how to return to Esc and function keys."
       },
-      "body": "Use the Touch Bar for brightness, quiet volume, workspace switching and opening your assistant. Esc and the function row stay available.",
+      "body": "Try Esc, display brightness and quiet volume on the Touch Bar. Use Fn to reach the function-key row. Advanced programmable controls can be added after the baseline hardware checks.",
       "touchbar": [
         "Esc",
         "Brightness",
         "Volume",
-        "Workspaces",
-        "Assistant"
+        "Fn"
       ],
-      "notes": "Baseline functional row is independent of custom DRM rendering. Programmable controls follow the same Imagine commands as keyboard and pointer actions, and obey the lock screen."
+      "notes": "The baseline Pomona controls provide Esc, brightness, volume and the Fn function row. Workspace/assistant controls and custom DRM rendering are future instrumentation, not installed baseline behavior."
     },
     {
       "id": "design",
@@ -337,8 +358,6 @@
         "tailscale",
         "manager",
         "github",
-        "claude",
-        "dsh",
         "hardware"
       ],
       "action": "onboarding.finish",
@@ -346,10 +365,10 @@
         "kind": "acknowledgement",
         "text": "Finish setup"
       },
-      "body": "Your browser and assistant are ready. Reopen setup from Finder whenever you want to finish an optional step.",
+      "body": "Your desktop and browser are ready. Reopen setup from Finder whenever you want to connect an optional assistant or finish another optional step.",
       "touchbar": [
         "Open Chrome",
-        "Open assistant",
+        "Reopen setup",
         "Done"
       ],
       "notes": "Completed setup must remain resumable. Authentication expiration changes status; it must not rerun destructive installation or reset all setup choices."

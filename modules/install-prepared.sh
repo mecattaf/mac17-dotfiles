@@ -10,11 +10,13 @@ usage() {
   cat <<'HELP'
 Usage: mac17-install --disk /dev/disk/by-id/<internal-Apple-SSD>
        mac17-install --disk /dev/disk/by-id/<internal-Apple-SSD> \
-         --install --backup-dir /path/on/another/writable/disk
+         --install [--backup-dir /path/on/another/writable/disk]
 
 The first command only checks and prints a plan. The second backs up the
 Apple EFI partition and GPT to separate media, requires a typed confirmation,
 then replaces macOS with the exact NixOS system already on the USB.
+The prepared USB includes its own writable backup partition. An explicit
+--backup-dir can select other writable block media instead.
 The Apple ESP, including its T1 firmware, is retained. Its GPT name becomes
 MAC17_EFI; its location, type, UUID and filesystem contents are preserved.
 No Wi-Fi password or account credential is needed to install the base system.
@@ -42,14 +44,14 @@ disk=$(readlink -f -- "$disk_arg")
 [[ $(lsblk -dnro TYPE "$disk") == disk ]] || fail 'select the whole internal disk, not a partition'
 [[ $(lsblk -dnro RM "$disk") == 0 ]] || fail 'the selected disk reports removable media'
 [[ $(lsblk -dnro TRAN "$disk") != usb ]] || fail 'the selected disk is on USB'
-model=$(lsblk -dnro MODEL "$disk" | sed 's/[[:space:]]*$//')
+model=$(lsblk -dn -o MODEL "$disk" | sed 's/[[:space:]]*$//')
 [[ "$model" == APPLE\ SSD* ]] || fail 'the selected disk does not identify as an internal Apple SSD'
 (( $(blockdev --getsize64 "$disk") >= 64000000000 )) || fail 'the selected disk is smaller than 64 GB'
 [[ $(blkid -p -s PTTYPE -o value "$disk") == gpt ]] || fail 'the selected disk must have an existing Apple GPT'
 [[ ! -e /dev/mapper/mac17-root ]] || fail 'mac17-root already exists; inspect the previous attempt before proceeding'
 ! mountpoint -q /mnt || fail '/mnt is already mounted'
 
-layout=$(lsblk -J -b -o PATH,TYPE,SIZE,FSTYPE,PARTTYPE,PARTN,PARTUUID,MOUNTPOINTS "$disk")
+layout=$(lsblk --tree -J -b -o PATH,TYPE,SIZE,FSTYPE,PARTTYPE,PARTN,PARTUUID,MOUNTPOINTS "$disk")
 jq -e '[.. | objects | .mountpoints? // [] | .[] | select(. != null and . != "")] | length == 0' <<<"$layout" >/dev/null || fail 'a filesystem on the target is mounted'
 jq -e '[.blockdevices[0].children[]? | select(.type != "part")] | length == 0' <<<"$layout" >/dev/null || fail 'the target has active device-mapper or other child devices'
 esp_guid='c12a7328-f81f-11d2-ba4b-00a0c93ec93b'
@@ -102,30 +104,42 @@ printf '\nTarget: %s\nModel: %s\n' "$disk_arg" "$model"
 lsblk -o NAME,SIZE,TYPE,FSTYPE,PARTLABEL,MOUNTPOINTS "$disk"
 printf '\nKeep: %s, Apple EFI + T1 firmware\nCreate: 2 GiB ext4 /boot; LUKS2 + ext4 / on remaining space\nSystem: %s\nSource: %s\n\n' "$esp" "$MAC17_TARGET_SYSTEM" "${MAC17_SOURCE_REVISION:-unknown}"
 if ! "$do_install"; then
-  printf 'Plan only. Nothing has been changed. Use --install with --backup-dir after review.\n'
+  printf 'Plan only. Nothing has been changed. Use --install after review. The prepared USB stores the firmware backup.\n'
   exit 0
 fi
 
-[[ -n "$backup_dir" && -d "$backup_dir" && -w "$backup_dir" ]] || fail '--backup-dir must be an existing writable directory on another disk'
+if [[ -z "$backup_dir" ]]; then
+  backup_dir=$(mac17-usb-backup) || fail 'cannot mount the prepared USB backup partition; provide --backup-dir on separate writable block media'
+fi
+[[ -d "$backup_dir" && -w "$backup_dir" ]] || fail '--backup-dir must be an existing writable directory on another disk'
 backup_dir=$(realpath -- "$backup_dir")
 backup_source=$(findmnt -rn -o SOURCE -T "$backup_dir")
 backup_source=${backup_source%%\[*}
 [[ -b "$backup_source" ]] || fail 'the backup directory must be on separately mounted writable block media'
 backup_source=$(readlink -f -- "$backup_source")
 if lsblk -snrpo NAME "$backup_source" | grep -Fxq "$disk"; then fail 'the backup directory is on the disk that would be erased'; fi
+# Reserve enough room even if the ESP image compresses poorly. Never remove
+# an older backup automatically. Every write and verification precedes erasure.
+esp_size=$(blockdev --getsize64 "$esp")
+efi_size=$(du -sb "$esp_mount/EFI" | cut -f1)
+required_space=$((esp_size + esp_size / 100 + efi_size + 16 * 1024 * 1024))
+available_space=$(df -B1 --output=avail "$backup_dir" | tail -n1)
+(( available_space >= required_space )) || fail 'insufficient backup space; copy earlier USB backups somewhere safe or supply larger --backup-dir media'
 backup=$(mktemp -d "$backup_dir/mac17-efi-$(date -u +%Y%m%dT%H%M%SZ).XXXXXX")
 sgdisk --backup="$backup/original-gpt.bin" "$disk"
-dd if="$esp" of="$backup/apple-esp.img" bs=4M conv=fsync status=progress
+dd if="$esp" bs=4M status=progress | gzip -1 > "$backup/apple-esp.img.gz"
+gzip -t "$backup/apple-esp.img.gz"
+[[ $(gzip -dc "$backup/apple-esp.img.gz" | wc -c) == "$esp_size" ]] || fail 'the raw ESP backup has an unexpected size'
 tar -C "$esp_mount" -czf "$backup/apple-efi-files.tar.gz" EFI
 printf '%s\n' "$firmware_before" > "$backup/t1-files.sha256"
 printf '%s\n' "$esp_geometry_before" > "$backup/esp-geometry.json"
 cp /etc/mac17/install/image.json "$backup/image.json"
 (
   cd "$backup"
-  sha256sum apple-esp.img original-gpt.bin apple-efi-files.tar.gz > SHA256SUMS
+  sha256sum apple-esp.img.gz original-gpt.bin apple-efi-files.tar.gz > SHA256SUMS
   sha256sum --check SHA256SUMS
 )
-sync -f "$backup/apple-esp.img"
+sync -f "$backup/apple-esp.img.gz"
 printf '\nVerified EFI backup: %s\n' "$backup"
 printf 'macOS and all other partitions on %s will now be erased.\n' "$disk_arg"
 read -r -p 'Type INSTALL MAC17 to continue: ' answer
@@ -144,8 +158,8 @@ sgdisk --change-name=1:MAC17_EFI \
   --new=3:0:0 --typecode=3:8309 --change-name=3:MAC17_CRYPT "$disk"
 partprobe "$disk"
 udevadm settle
-boot_part=$(lsblk -J -o PATH,PARTN "$disk" | jq -r '.blockdevices[0].children[] | select((.partn | tonumber) == 2) | .path')
-root_part=$(lsblk -J -o PATH,PARTN "$disk" | jq -r '.blockdevices[0].children[] | select((.partn | tonumber) == 3) | .path')
+boot_part=$(lsblk --tree -J -o PATH,PARTN "$disk" | jq -r '.blockdevices[0].children[] | select((.partn | tonumber) == 2) | .path')
+root_part=$(lsblk --tree -J -o PATH,PARTN "$disk" | jq -r '.blockdevices[0].children[] | select((.partn | tonumber) == 3) | .path')
 [[ -b "$boot_part" && -b "$root_part" ]] || fail 'new target partitions did not appear'
 [[ $(blkid -s PARTUUID -o value "$esp") == "$esp_uuid_before" ]] || fail 'the preserved ESP partition UUID changed'
 esp_geometry_after=$(sfdisk --json "$disk" | jq -c --arg e "$esp" '.partitiontable.partitions[] | select(.node == $e) | {start,size,type,uuid}')
@@ -157,6 +171,7 @@ unset disk_passphrase
 opened_root=true
 mkfs.ext4 -L MAC17_BOOT "$boot_part"
 mkfs.ext4 -L MAC17_ROOT /dev/mapper/mac17-root
+mkdir -p /mnt
 mount /dev/mapper/mac17-root /mnt
 mounted_root=true
 mkdir -p /mnt/boot
@@ -167,7 +182,7 @@ mount -o umask=0077 "$esp" /mnt/boot/efi
 
 # Install the exact closure. No evaluation/build of a modified configuration
 # occurs on the laptop. The first copy must succeed without substitutions.
-nix --extra-experimental-features 'nix-command flakes' --offline copy \
+nix --extra-experimental-features 'nix-command flakes' --offline copy --no-check-sigs \
   --to 'local?root=/mnt' "$MAC17_TARGET_SYSTEM"
 nixos-install --root /mnt --system "$MAC17_TARGET_SYSTEM" \
   --no-channel-copy --no-root-passwd --option substitute false

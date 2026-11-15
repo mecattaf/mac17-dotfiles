@@ -1,0 +1,18 @@
+{
+  "fat32": true,
+  "nixBuiltImage": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer",
+  "schema": 1,
+  "sourceMatchedNixosHybridFlags": true,
+  "appendedPartition": {
+    "node": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer/iso/mac17-installer.iso3",
+    "start": 34816,
+    "size": 1048576,
+    "type": "c"
+  },
+  "fatWritable": true,
+  "existingEfiUnchanged": true,
+  "isoFileUnchanged": true,
+  "uefiUsbBootMarker": true,
+  "qemuExitCode": 0,
+  "physicalAppleAcceptance": false
+}

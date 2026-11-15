@@ -7,6 +7,8 @@ result-*
 *.key
 *.log
 .direnv/
+__pycache__/
+*.pyc
 hardware-private/
 credentials/
 **/.credentials.json

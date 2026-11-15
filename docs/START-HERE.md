@@ -9,9 +9,12 @@ Mac's small Apple firmware partition before replacing macOS.
 1. Accept the GitHub invitations for `mac17-dotfiles` and `agency-agency/imagine`
    while signed in as **tarekcmahmoud**.
 2. Open [the latest release](https://github.com/mecattaf/mac17-dotfiles/releases/latest).
-   Download its **`.iso` file** and **`SHA256SUMS`**. Use the prepared Mac17
-   image rather than a generic NixOS download.
-3. In macOS Terminal, from the download directory, run `shasum -a 256 -c SHA256SUMS`.
+   Follow **Download installer** in the release notes and download the
+   **mac17-installer** artifact. Extract the ZIP: it contains
+   **mac17-installer.iso**, **SHA256SUMS** and these instructions. Use this
+   prepared image rather than a generic NixOS download. The `.part-*` release
+   files are archival pieces; do not flash an individual part.
+3. In macOS Terminal, from the extracted folder, run `shasum -a 256 -c SHA256SUMS`.
    Check that the ISO reports `OK`.
 4. Open [balena Etcher](https://etcher.balena.io/), choose the ISO, select your
    USB stick and flash it. Flashing erases the USB stick. Use a stick large
@@ -31,18 +34,18 @@ Mac model and Apple SSD, prints what it will keep and replace, and requires
 you to confirm locally before removing macOS. **Keep Apple's existing EFI
 partition. Do not run a generic whole-disk erase or the ordinary installer.**
 
-Have a writable backup drive connected for the firmware backup. This can be
-the existing backup drive if Linux can write its filesystem. The installer
-requires a backup destination on a different disk and verifies the saved data.
-APFS/Time Machine volumes may need a separate writable volume; do not reformat
-your personal backup to satisfy this requirement.
+The prepared USB also has a writable **MAC17SAVE** partition. The installer
+saves and verifies the Apple firmware backup there before erasing macOS. No
+second USB drive is needed. Keep this backup: copy it somewhere safe before
+you flash or erase this USB again. If the partition is full, the installer
+stops; you can instead supply `--backup-dir` on another mounted writable disk.
 
 The two installer commands are:
 
 ```sh
 sudo mac17-install --disk /dev/disk/by-id/<your-internal-Apple-SSD>
 sudo mac17-install --disk /dev/disk/by-id/<your-internal-Apple-SSD> \
-  --install --backup-dir /path/on/the-mounted-backup-drive
+  --install
 ```
 
 The first prints a plan. Use the complete persistent disk path shown on your
@@ -63,10 +66,14 @@ The setup experience uses this order:
 2. **Sign in to Google Chrome.** Open the profile button and sign in with your
    own Google account. Check your bookmarks and saved information. Chrome is
    the first account login on the new desktop. Sync remains your choice.
-3. **Connect your Tailscale account.** Choose the account that will own this
+3. **Start a free AI assistant**, if you want one now. Choose Google
+   Antigravity with your own personal Google Account, then confirm after you
+   receive a reply. Its launcher disables paid-credit fallback. See
+   [the free AI guide](free-ai.md) for other services. Claude Code is optional.
+4. **Connect your Tailscale account.** Choose the account that will own this
    computer, then invite Tom as described below.
-4. Connect GitHub as **tarekcmahmoud**, your Claude account and the other
-   services you want. Cloudflare is included for your own utilities.
+5. Connect GitHub as **tarekcmahmoud**, then choose your free AI accounts
+   in setup. Claude Code is optional. Cloudflare is included for your own utilities.
 
 The Linux login unlocks your encrypted keyring. If setup says it is locked,
 use **Unlock keyring** before Chrome sign-in; avoid creating an empty-password
@@ -104,6 +111,7 @@ Control, as displayed in Chrome and the editor. There are no required Vim keys.
 | Clipboard history | Meta+V |
 | Screenshot | Meta+Shift+S |
 | Lock | Meta+Control+L |
+| Resume setup | Meta+Shift+O |
 
 Nano is the terminal editor; the graphical text editor handles ordinary files.
 The Touch Bar provides Escape, hardware controls and Fn/F1–F12. Custom rendered

@@ -14,13 +14,14 @@
   ...
 }:
 let
+  usbBackup = pkgs.callPackage ../pkgs/usb-backup/usb-backup.nix { };
   installer = pkgs.writeShellApplication {
     name = "mac17-install";
     runtimeInputs = with pkgs; [
       coreutils cryptsetup e2fsprogs findutils gawk gptfdisk gnugrep gnused
       gnutar gzip jq nixos-install nixos-enter openssh parted rsync util-linux
       systemd
-    ];
+    ] ++ [ usbBackup ];
     text = ''
       export MAC17_TARGET_SYSTEM=${lib.escapeShellArg (toString targetSystem)}
       export MAC17_TARGET_SOURCE=${lib.escapeShellArg (toString targetSource)}
@@ -52,7 +53,7 @@ in
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  environment.systemPackages = [ installer pkgs.networkmanager pkgs.nixos-facter ];
+  environment.systemPackages = [ installer usbBackup pkgs.networkmanager pkgs.nixos-facter ];
 
   # storeContents takes full closures; includeSystemBuildDependencies is
   # intentionally not required when installing a prebuilt targetSystem.
@@ -77,8 +78,9 @@ in
 
     The complete target system is on this USB. Installation can work offline.
     Run: sudo mac17-install --disk /dev/disk/by-id/<internal-Apple-SSD>
-    This prints the plan only. Add --install and an external --backup-dir to
-    install after reviewing the plan and typing the on-device confirmation.
+    This prints the plan only. Add --install after reviewing the plan and
+    typing the on-device confirmation. Firmware backups go to this USB's
+    writable backup partition; --backup-dir can select another mounted disk.
 
     Wi-Fi, if needed for remote assistance: nmtui
     The preferred account flow starts after installation: Wi-Fi, Chrome sign-in,

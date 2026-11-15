@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "guest_kernel": "7.3.4",
+  "runtime_seconds": 34.35,
+  "test_derivation": "/nix/store/hww8gnchnlpg3b7kcb36yjhf7dx0ah50-vm-test-run-mac17-single-usb-mount.drv",
+  "usb_image": "/nix/store/3zwkv3vcdjxaxpk8987mk9hc12r1d4hk-mac17-usb-installer/iso/mac17-installer.iso",
+  "helper_sha256": "83cd739659623b4cd0852644f8f2cebc7c5376fce72a7a53b611a755eb6b4d04",
+  "isolation": "runtime-test --allow-kvm, NixOS QEMU, source image readonly in Nix store, snapshot=on temporary writable overlay, emulated xHCI USB-storage",
+  "proved": [
+    "actual ISO9660 p1 mounted at /iso",
+    "helper follows live ISO ancestry to USB disk",
+    "exactly matching same-disk vfat MAC17SAVE mounted",
+    "parent disk identity independently checked",
+    "sentinel write fsynced, unmounted, helper rerun, sentinel read verified"
+  ],
+  "not_tested": [
+    "physical USB stick writes or physical Mac EFI boot",
+    "final large ISO payload (fixture ISO only)"
+  ],
+  "test_result": "/nix/store/msrlq232ia9wh6qklxz6gq39m69gz831-vm-test-run-mac17-single-usb-mount"
+}

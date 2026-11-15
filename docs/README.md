@@ -43,5 +43,6 @@ Copy the following prompt, then supply this README and only the current phase:
 
 After each phase, keep a short checkpoint in your chat: **phase completed;
 observed result; unresolved issue; next phase**. Keep account secrets out of it.
+Finish with [daily use and account checks](daily-use-and-accounts.md).
 Use [START-HERE](START-HERE.md) for the compact overview. Read the research
 folder only when Tom needs to investigate a specific problem.

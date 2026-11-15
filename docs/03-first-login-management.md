@@ -37,4 +37,5 @@ the keyring cannot unlock, the wrong account owns the Mac, or Tom cannot reach
 it. Keep the machine running if possible and describe the visible error.
 Do not copy Tom's credentials, node identity, or private keys onto the Mac.
 
-Next: [4. Start free AI](04-free-ai.md).
+Next: [4. Start free AI](04-free-ai.md). Keep the
+[account completion checklist](daily-use-and-accounts.md) alongside setup.

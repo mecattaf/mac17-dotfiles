@@ -53,3 +53,6 @@ For later reference: [everyday shortcuts](START-HERE.md#everyday-controls),
 Normal system updates preserve writable account state. Reinstallation requires
 an encrypted personal-state backup or fresh sign-ins; dotfiles alone do not
 contain your account logins.
+
+Finish with [daily use and account checks](daily-use-and-accounts.md) before
+calling the everyday setup complete.

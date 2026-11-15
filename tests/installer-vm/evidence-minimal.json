@@ -22,8 +22,9 @@
   "not_tested": [
     "physical Apple boot/hardware",
     "reboot of installed target",
-    "final desktop closure (pending)",
-    "optional USB helper proof (pending)"
+    "final desktop closure (subsequently tested separately)",
+    "optional USB helper proof (subsequently tested separately)"
   ],
-  "network_qualification": "QEMU default e1000e NIC existed despite empty networkingOptions; no NIC-absence claim. Production Nix copy explicitly --offline; no IPv4 default route assertion passed."
+  "network_qualification": "QEMU default e1000e NIC existed despite empty networkingOptions; no NIC-absence claim. Production Nix copy explicitly --offline; no IPv4 default route assertion passed.",
+  "superseded_by": "evidence-final.json"
 }

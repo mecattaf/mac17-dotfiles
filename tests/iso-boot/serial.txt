@@ -1,0 +1,107 @@
+[2J[001;001H[=3h[2J[001;001H[2J[001;001H[8;042;160t[2J[001;001H[2J[001;001H[8;056;240t[2J[001;001HBdsDxe: loading Boot0002 "UEFI QEMU QEMU USB HARDDRIVE MAC17-TEST-USB" from PciRoot(0x0)/Pci(0x2,0x0)/USB(0x0,0x0)
+BdsDxe: starting Boot0002 "UEFI QEMU QEMU USB HARDDRIVE MAC17-TEST-USB" from PciRoot(0x0)/Pci(0x2,0x0)/USB(0x0,0x0)
+[0m[30m[40m[2J[001;001H[0m[37m[40m
+Loading graphical boot menu...
+
+Press 't' to use the text boot menu on this console...
+
+[!p]104\[0m[?7h[1G[0J7[32766;32766H[6n8[!p]104\[0m[?7h[1G[0J7[32766;32766H[6n8]3008;start=c0fd6cbfef7f4cf3bfc2f119975e94c7;user=root;hostname=mac17-installer;machineid=671fa6b797c64bfda25124810faae3e7;bootid=7d5616480ce2421e93e441e279d14e03;pid=920;pidfdid=282;comm=(agetty);servicename=serial-getty@ttyS0.service;invocationid=ea223c6afe76441dbe8dc03a8a820289;type=service\P+q6E616D65\
+Tarek's prepared NixOS installer
+
+The complete target system is on this USB. Installation can work offline.
+Run: sudo mac17-install --disk /dev/disk/by-id/<internal-Apple-SSD>
+This prints the plan only. Add --install after reviewing the plan and
+typing the on-device confirmation. Firmware backups go to this USB's
+writable backup partition; --backup-dir can select another mounted disk.
+
+Wi-Fi, if needed for remote assistance: nmtui
+The preferred account flow starts after installation: Wi-Fi, Chrome sign-in,
+Tailscale enrollment, then the remaining account connections.
+mac17-installer login: nixos (automatic login)
+
+]3008;start=5929c829994547eba3bfb9c22e084f6d;user=root;hostname=mac17-installer;machineid=671fa6b797c64bfda25124810faae3e7;bootid=7d5616480ce2421e93e441e279d14e03;pid=920;pidfdid=282;comm=login;targetuser=nixos;sessionid=3;type=session\[?2004h
+[1;32m[]0;nixos@mac17-installer: ~nixos@mac17-installer:~]$[0m [H[J[1;32m[]0;nixos@mac17-installer: ~nixos@mac17-installer:~]$[0m echo c2V0IC1ldW8gcGlwZWZhaWwKcHJpbnRmICdcbk1BQzE3X0lTT19HVUVTVF9DSEVDS1NfQkVHSU5cbicKdGVzdCAtZCAvc3lzL2Zpcm13YXJlL2VmaQp0ZXN0ICIkKGNhdCAvc3lzL2NsYXNzL2RtaS9pZC9zeXNfdmVuZG9yKSIgPSBRRU1VCnRlc3QgIiQoY2F0IC9zeXMvY2xhc3MvZG1pL2lkL3Byb2R1Y3RfbmFtZSkiID0gTWFjQm9va1BybzE0LDMKdGVzdCAiJCh1bmFtZSAtcikiID0gNy4zLjQKdGVzdCAteiAiJChpcCByb3V0ZSBzaG93IGRlZmF1bHQpIgptYW5pZmVzdD0vZXRjL21hYzE3L2luc3RhbGwvaW1hZ2UuanNvbgpqcSAtZSAnLnRhcmdldFN5c3RlbSA9PSAiL25peC9zdG9yZS9hNW05YXc5MjB6c2E5MjlkNWcyNjZzZnFmYndsc2E5Ny1uaXhvcy1zeXN0ZW0tdGFyZWstbWFjMTctMjYuMTEuMjAyNjExMTMuZDVjYzY4MyIgYW5kIC50YXJnZXRTb3VyY2UgPT0gIi9uaXgvc3RvcmUvMGlxbTVwazhheHdrbTI4bWtoNDh3NG04bnF3Nmk3MXctc291cmNlIiBhbmQgLmhhcmR3YXJlTW9kZWwgPT0gIk1hY0Jvb2tQcm8xNCwzIicgIiRtYW5pZmVzdCIKY2F0ICIkbWFuaWZlc3QiCnRhcmdldD0kKGpxIC1yICcudGFyZ2V0U3lzdGVtJyAiJG1hbmlmZXN0IikKc291cmNlPSQoanEgLXIgJy50YXJnZXRTb3VyY2UnICIkbWFuaWZlc3QiKQp0ZXN0IC14ICIkdGFyZ2V0L2Jpbi9zd2l0Y2gtdG8tY29uZmlndXJhdGlvbiIKdGVzdCAtcyAiJHNvdXJjZS9mbGFrZS5sb2NrIgpzaGEyNTZzdW0gIiRzb3VyY2UvZmxha2UubG9jayIKbml4LXN0b3JlIC1xUiAiJHRhcmdldCIgPiAvdG1wL21hYzE3LXByZXBhcmVkLWNsb3N1cmUKd2hpbGUgSUZTPSByZWFkIC1yIGl0ZW07IGRvIHRlc3QgLWUgIiRpdGVtIiB8fCB0ZXN0IC1MICIkaXRlbSI7IGRvbmUgPCAvdG1wL21hYzE3LXByZXBhcmVkLWNsb3N1cmUKcHJpbnRmICdQcmVwYXJlZCBjbG9zdXJlIHBhdGhzOiAnCndjIC1sIDwgL3RtcC9tYWMxNy1wcmVwYXJlZC1jbG9zdXJlCmZvciBuYW1lIGluIG1hYzE3LWluc3RhbGwgbWFjMTctdXNiLWJhY2t1cCBubXR1aSBjcnlwdHNldHVwIGxzYmxrIHBvbW9uYSB0YWlsc2NhbGU7IGRvIGNvbW1hbmQgLXYgIiRuYW1lIjsgZG9uZQpmb3IgbmFtZSBpbiBtYWMxNy1icm93c2VyIG1hYzE3LW9uYm9hcmRpbmcgY2xhdWRlIGdoOyBkbyB0ZXN0IC14ICIkdGFyZ2V0L3N3L2Jpbi8kbmFtZSI7IGRvbmUKbWFjMTctaW5zdGFsbCAtLWhlbHAKbWFjMTctdXNiLWJhY2t1cApiYWNrdXBfc291cmNlPSQoZmluZG1udCAtcm4gLW8gU09VUkNFIC1UIC9tZWRpYS9tYWMxNy1iYWNrdXApCmlzb19zb3VyY2U9JChmaW5kbW50IC1ybiAtbyBTT1VSQ0UgLVQgL2lzbykKdGVzdCAiJChmaW5kbW50IC1ybiAtbyBGU1RZUEUgLVQgL2lzbykiID0gaXNvOTY2MAp0ZXN0ICIkKGZpbmRtbnQgLXJuIC1vIEZTVFlQRSAtVCAvbWVkaWEvbWFjMTctYmFja3VwKSIgPSB2ZmF0CnRlc3QgIiRiYWNrdXBfc291cmNlIiAhPSAiJGlzb19zb3VyY2UiCmJhY2t1cF9kaXNrPSQobHNibGsgLXNucnBvIE5BTUUsVFlQRSAiJGJhY2t1cF9zb3VyY2UiIHwgYXdrICckMiA9PSAiZGlzayIge3ByaW50ICQxfScpCmlzb19kaXNrPSQobHNibGsgLXNucnBvIE5BTUUsVFlQRSAiJGlzb19zb3VyY2UiIHwgYXdrICckMiA9PSAiZGlzayIge3ByaW50ICQxfScpCnRlc3QgLW4gIiRiYWNrdXBfZGlzayIgJiYgdGVzdCAiJGJhY2t1cF9kaXNrIiA9ICIkaXNvX2Rpc2siCnRlc3QgIiQobHNibGsgLWRucm8gVFJBTiAiJGlzb19kaXNrIikiID0gdXNiCnByaW50ZiAnTm9uc2VjcmV0IGZpbmFsIElTTyBndWVzdCBwcm9iZVxuJyA+IC9tZWRpYS9tYWMxNy1iYWNrdXAvZWZpLWd1ZXN0LXByb29mLnR4dApzeW5jIC1mIC9tZWRpYS9tYWMxNy1iYWNrdXAvZWZpLWd1ZXN0LXByb29mLnR4dAp1bW91bnQgL21lZGlhL21hYzE3LWJhY2t1cAptYWMxNy11c2ItYmFja3VwCmdyZXAgLUZ4ICdOb25zZWNyZXQgZmluYWwgSVNPIGd1ZXN0IHByb2JlJyAvbWVkaWEvbWFjMTctYmFja3VwL2VmaS1ndWVzdC1wcm9vZi50eHQKdW1vdW50IC9tZWRpYS9tYWMxNy1iYWNrdXAKcHJpbnRmICdcbj09PSBMaXZlIElTTyBibG9jayBsYXlvdXQgPT09XG4nCmxzYmxrIC1vIE5BTUUsVFJBTixTSVpFLFRZUEUsTEFCRUwsRlNUWVBFLE1PVU5UUE9JTlRTCnByaW50ZiAnXG49PT0gRmFpbGVkIHVuaXRzIChyZXBvcnRlZCB3aXRob3V0IHN1cHByZXNzaW9uKSA9PT1cbicKc3lzdGVtY3RsIC0tZmFpbGVkIC0tbm8tbGVnZW5kIC0tcGxhaW4KcHJpbnRmICdcbj09PSBSZXF1aXJlZCBsaXZlIHNlcnZpY2VzID09PVxuJwpzeXN0ZW1jdGwgaXMtYWN0aXZlIE5ldHdvcmtNYW5hZ2VyIHRhaWxzY2FsZWQgc3NoZApwcmludGYgJ1xuPT09IE9mZmxpbmUgcmVjZWlwdCA9PT1cbicKaXAgLWJyIGxpbmsKaXAgcm91dGUKcHJpbnRmICdcbk1BQzE3X0lTT19HVUVTVF9DSEVDS1NfUEFTU1xuJwo= | base64 -d | sudo -n bash
+[?2004l
+MAC17_ISO_GUEST_CHECKS_BEGIN
+[0;39mtrue[0m
+{"filesystem":"luks2-ext4","hardwareModel":"MacBookPro14,3","preservedPartition":"Apple EFI System Partition","schema":1,"sourceRevision":"af5434b66b388e9a8b0bd9ac3d4b3f724df566d6","targetSource":"/nix/store/0iqm5pk8axwkm28mkh48w4m8nqw6i71w-source","targetSystem":"/nix/store/a5m9aw920zsa929d5g266sfqfbwlsa97-nixos-system-tarek-mac17-26.11.20261113.d5cc683"}bb965b64e8055297e96383e568fb7c8cd63ee4ef96c6d2d63bb924994937422e  /nix/store/0iqm5pk8axwkm28mkh48w4m8nqw6i71w-source/flake.lock
+Prepared closure paths: 1731
+/run/current-system/sw/bin/mac17-install
+/run/current-system/sw/bin/mac17-usb-backup
+/run/current-system/sw/bin/nmtui
+/run/current-system/sw/bin/cryptsetup
+/run/current-system/sw/bin/lsblk
+/run/current-system/sw/bin/pomona
+/run/current-system/sw/bin/tailscale
+Usage: mac17-install --disk /dev/disk/by-id/<internal-Apple-SSD>
+       mac17-install --disk /dev/disk/by-id/<internal-Apple-SSD> \
+         --install [--backup-dir /path/on/another/writable/disk]
+
+The first command only checks and prints a plan. The second backs up the
+Apple EFI partition and GPT to separate media, requires a typed confirmation,
+then replaces macOS with the exact NixOS system already on the USB.
+The prepared USB includes its own writable backup partition. An explicit
+--backup-dir can select other writable block media instead.
+The Apple ESP, including its T1 firmware, is retained. Its GPT name becomes
+MAC17_EFI; its location, type, UUID and filesystem contents are preserved.
+No Wi-Fi password or account credential is needed to install the base system.
+/media/mac17-backup
+/media/mac17-backup
+Nonsecret final ISO guest probe
+
+=== Live ISO block layout ===
+NAME   TRAN    SIZE TYPE LABEL         FSTYPE   MOUNTPOINTS
+loop0          4.3G loop               squashfs /nix/.ro-store
+sda    usb     4.9G disk MAC17_INSTALL iso9660  
+├─sda1         4.4G part MAC17_INSTALL iso9660  /iso
+├─sda2           3M part EFIBOOT       vfat     
+└─sda3         512M part MAC17SAVE     vfat     
+sr0    sata   1024M rom                         
+
+=== Failed units (reported without suppression) ===
+[0;1;31mmbpfan.service[0m loaded [0;1;31mfailed[0m [0;1;31mfailed[0m A fan manager daemon for MacBook Pro[m
+[K
+=== Required live services ===
+active
+active
+active
+
+=== Offline receipt ===
+[1;36mlo               [0mUNKNOWN        [1;33m00:00:00:00:00:00 [0m<LOOPBACK,UP,LOWER_UP> 
+[1;36mtailscale0       [0mUNKNOWN        <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> 
+
+MAC17_ISO_GUEST_CHECKS_PASS
+[?2004h
+[1;32m[]0;nixos@mac17-installer: ~nixos@mac17-installer:~]$[0m sudo journalctl -b -u mbpfan --no-pager -n 25; sudo systemctl show mbpfan -p Result -p ExecMainStatus; ls -d /sys/devices/platform/applesmc*; uname -r; cat /proc/cmdline
+[?2004lNov 15 21:32:08 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Failed with result 'exit-code'.[0m
+Nov 15 21:32:08 mac17-installer systemd[1]: mbpfan.service: Scheduled restart job, restart counter is at 1.
+Nov 15 21:32:08 mac17-installer systemd[1]: Started A fan manager daemon for MacBook Pro.
+Nov 15 21:32:08 mac17-installer mbpfan[647]: /nix/store/7id77q7n1ms1cybawqakmd2sb55ql1ql-mbpfan-2.4.0/bin/mbpfan needs coretemp support. Please either load it or build it into the kernel. Exiting.
+Nov 15 21:32:08 mac17-installer systemd[1]: [0;1;39m[0;1;31m[0;1;39mmbpfan.service: Main process exited, code=exited, status=1/FAILURE[0m
+Nov 15 21:32:08 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Failed with result 'exit-code'.[0m
+Nov 15 21:32:08 mac17-installer systemd[1]: mbpfan.service: Scheduled restart job, restart counter is at 2.
+Nov 15 21:32:08 mac17-installer systemd[1]: Started A fan manager daemon for MacBook Pro.
+Nov 15 21:32:08 mac17-installer mbpfan[700]: /nix/store/7id77q7n1ms1cybawqakmd2sb55ql1ql-mbpfan-2.4.0/bin/mbpfan needs coretemp support. Please either load it or build it into the kernel. Exiting.
+Nov 15 21:32:08 mac17-installer systemd[1]: [0;1;39m[0;1;31m[0;1;39mmbpfan.service: Main process exited, code=exited, status=1/FAILURE[0m
+Nov 15 21:32:08 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Failed with result 'exit-code'.[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: mbpfan.service: Scheduled restart job, restart counter is at 3.
+Nov 15 21:32:09 mac17-installer systemd[1]: Started A fan manager daemon for MacBook Pro.
+Nov 15 21:32:09 mac17-installer mbpfan[807]: /nix/store/7id77q7n1ms1cybawqakmd2sb55ql1ql-mbpfan-2.4.0/bin/mbpfan needs coretemp support. Please either load it or build it into the kernel. Exiting.
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;39m[0;1;31m[0;1;39mmbpfan.service: Main process exited, code=exited, status=1/FAILURE[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Failed with result 'exit-code'.[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: mbpfan.service: Scheduled restart job, restart counter is at 4.
+Nov 15 21:32:09 mac17-installer systemd[1]: Started A fan manager daemon for MacBook Pro.
+Nov 15 21:32:09 mac17-installer mbpfan[814]: /nix/store/7id77q7n1ms1cybawqakmd2sb55ql1ql-mbpfan-2.4.0/bin/mbpfan needs coretemp support. Please either load it or build it into the kernel. Exiting.
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;39m[0;1;31m[0;1;39mmbpfan.service: Main process exited, code=exited, status=1/FAILURE[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Failed with result 'exit-code'.[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: mbpfan.service: Scheduled restart job, restart counter is at 5.
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Start request repeated too quickly.[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;33m[0;1;38:5:185m[0;1;39m[0;1;33m[0;1;38:5:185mmbpfan.service: Failed with result 'start-limit-hit'.[0m
+Nov 15 21:32:09 mac17-installer systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start A fan manager daemon for MacBook Pro.[0m
+Result=start-limit-hit[m
+ExecMainStatus=1[m
+[Kls: cannot access '/sys/devices/platform/applesmc*': No such file or directory
+7.3.4
+BOOT_IMAGE=/boot//nix/store/nii7dvrn4rx3rc62cmwq5fqmna6f7sxb-linux-7.3.4/bzImage findiso= init=/nix/store/g8yx9qfqaryybir4wqjg5kc8ikpx2bz1-nixos-system-mac17-installer-26.11.20261113.d5cc683/init root=fstab loglevel=4 lsm=landlock,yama,bpf
+[?2004h
+[1;32m[]0;nixos@mac17-installer: ~nixos@mac17-installer:~]$[0m 

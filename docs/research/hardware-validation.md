@@ -38,3 +38,7 @@ These store paths are the successful current builds; they are architecture/input
 ```
 
 Earlier builds against Linux 6.18.63 established compatibility with an older LTS source tree. They are superseded for this installation by the stable 7.3.4 results above.
+
+## Final prepared image validation
+
+The exact release ISO (`9f11271addf7a553c67d30a29649e30bdd70f501a54d82ac5a5900d3932a6296`, 5,224,726,528 bytes) booted through emulated EFI USB into its normal live login with `-nic none`. Its manifest matched source `af5434b` and the prepared desktop; all 1,731 target-closure paths were present, and the automatic same-USB FAT backup mount/write/remount passed. NetworkManager, tailscaled and sshd were active. The sole failed unit, mbpfan, reported missing coretemp in the AMD-host QEMU, which also exposes no Apple SMC; this failure is recorded and real fan control remains unverified. The separate complete offline installation of the exact 11.6 GiB desktop closure passed all six disposable-disk scenarios in 410.39 seconds. See the [final installer receipt](../../tests/installer-vm/evidence-final.json) and [actual ISO boot receipt, screenshots and serial log](../../tests/iso-boot/evidence-iso.json). Physical Mac hardware and installed desktop acceptance remain pending.

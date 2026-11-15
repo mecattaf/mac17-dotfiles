@@ -34,6 +34,6 @@
   "not_tested": [
     "installed target reboot",
     "physical Apple boot/hardware",
-    "actual final ISO boot (separate pending proof)"
+    "actual final ISO boot (passed separately; see ../iso-boot/evidence-iso.json)"
   ]
 }

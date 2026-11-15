@@ -48,4 +48,4 @@ jobs:
         env:
           ARTIFACT_URL: ${{ steps.image.outputs.artifact-url }}
         run: |
-          printf 'Download [mac17-installer](%s), extract the ZIP, verify SHA256SUMS, then flash mac17-installer.iso.\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' "Download [mac17-installer]($ARTIFACT_URL), extract the ZIP, verify SHA256SUMS, then flash mac17-installer.iso. Start with docs/README.md." >> "$GITHUB_STEP_SUMMARY"

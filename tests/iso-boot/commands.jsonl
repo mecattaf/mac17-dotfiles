@@ -1,0 +1,14 @@
+{"action":"freeze_menu"}
+{"action":"key","key":"up"}
+{"action":"key","key":"up"}
+{"action":"key","key":"up"}
+{"action":"key","key":"ret"}
+{"action":"capture","name":"efi-options.png"}
+{"action":"status"}
+{"action":"capture","name":"after-options.png"}
+{"action":"capture","name":"live-console.png"}
+{"action":"status"}
+{"action":"guest_script","path":"/tmp/mac17-iso-proof/guest-checks.sh"}
+{"action":"status"}
+{"action":"serial","text":"sudo journalctl -b -u mbpfan --no-pager -n 25; sudo systemctl show mbpfan -p Result -p ExecMainStatus; ls -d /sys/devices/platform/applesmc*; uname -r; cat /proc/cmdline\r"}
+{"action":"quit"}

@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "validated_at_utc": "2026-11-15T21:35:43Z",
+  "scope": "Exact final ISO EFI USB boot, complete prepared payload presence, writable same-USB backup partition and offline live environment",
+  "iso": {
+    "store_path": "/nix/store/lkarkb7aykr2p6smjxwip109h17gsb4k-mac17-usb-installer/iso/mac17-installer.iso",
+    "sha256": "9f11271addf7a553c67d30a29649e30bdd70f501a54d82ac5a5900d3932a6296",
+    "bytes": 5224726528,
+    "hash_verification": "Independently recomputed whole-file SHA256 after guest cleanup, matching derivation SHA256SUMS"
+  },
+  "source_revision": "af5434b66b388e9a8b0bd9ac3d4b3f724df566d6",
+  "target_system": "/nix/store/a5m9aw920zsa929d5g266sfqfbwlsa97-nixos-system-tarek-mac17-26.11.20261113.d5cc683",
+  "target_source": "/nix/store/0iqm5pk8axwkm28mkh48w4m8nqw6i71w-source",
+  "guest_source_flake_lock_sha256": "bb965b64e8055297e96383e568fb7c8cd63ee4ef96c6d2d63bb924994937422e",
+  "kernel": "7.3.4",
+  "prepared_closure_paths_verified_present": 1731,
+  "boot": {
+    "firmware": "OVMF UEFI",
+    "transport": "QEMU xHCI USB-storage, bootindex=1",
+    "entry": "Maintained ISO default GRUB entry, original kernel arguments unchanged",
+    "serial_access": "Started serial-getty@ttyS0.service from the guest VGA console after successful default boot; no ISO modification",
+    "screenshots": [
+      "efi-menu.png",
+      "live-console.png"
+    ]
+  },
+  "isolation": {
+    "wrapper": "runtime-test --allow-kvm on strix-coordinator",
+    "immutable_iso_overlay": "QEMU snapshot=on",
+    "host_block_devices_attached": false,
+    "host_store_or_home_shared": false,
+    "credentials_shared": false,
+    "network": "Explicit -nic none; only lo and unauthenticated tailscale0 appeared; no default route"
+  },
+  "live_commands_present": [
+    "mac17-install",
+    "mac17-usb-backup",
+    "nmtui",
+    "cryptsetup",
+    "lsblk",
+    "pomona",
+    "tailscale"
+  ],
+  "target_commands_present": [
+    "mac17-browser",
+    "mac17-onboarding",
+    "claude",
+    "gh"
+  ],
+  "backup_partition": {
+    "label": "MAC17SAVE",
+    "filesystem": "vfat",
+    "size_mib": 512,
+    "proof": "Production helper resolved mounted live ISO ancestry to same USB, mounted backup partition, wrote and fsynced sentinel, unmounted, remounted and read sentinel"
+  },
+  "required_live_services": {
+    "NetworkManager": "active",
+    "tailscaled": "active",
+    "sshd": "active"
+  },
+  "observed_failed_units": [
+    {
+      "unit": "mbpfan.service",
+      "result": "start-limit-hit",
+      "exit_status": 1,
+      "journal": "mbpfan needs coretemp support. Please either load it or build it into the kernel. Exiting.",
+      "qualification": "AMD-host QEMU exposes neither Intel coretemp nor Apple SMC. The maintained NixOS module declares both kernel modules. Failure was recorded without restarting/resetting/suppressing it; physical fan control remains unverified."
+    }
+  ],
+  "not_tested": [
+    "physical Mac EFI boot",
+    "real SPI keyboard, Broadcom Wi-Fi, CS8409 audio, T1/Touch Bar, camera, GPU, fan sensors and suspend",
+    "reboot into installed desktop or interactive browser/keyring sign-in"
+  ],
+  "guest_cleanup": {
+    "qemu_exit": 0,
+    "only_probe_guest_stopped": true
+  },
+  "files": {
+    "guest_script": "guest-checks.sh",
+    "harness": "boot-iso.py",
+    "keyboard_probe": "qmp-type.py",
+    "qemu_argv": "qemu-command.json",
+    "control_requests": "commands.jsonl",
+    "serial_receipt": "serial.txt",
+    "qemu_stderr": "qemu-stderr.txt"
+  }
+}

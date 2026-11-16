@@ -45,3 +45,8 @@ authorized management; the included public key is revocable in `keys/`.
 The repository starts under `mecattaf`, shared with `tarekcmahmoud`. Tom will
 transfer ownership to Tarek. GitHub redirects preserve old repository links;
 the configured remote should be updated after the transfer.
+
+## License
+
+Original configuration and integration code are [MIT licensed](LICENSE).
+External software retains its own terms; see [third-party notices](THIRD_PARTY_NOTICES.md).
